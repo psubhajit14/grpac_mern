@@ -8,9 +8,10 @@ export const Success: React.FC<any> = () => {
     const { refId } = useParams();
     const [loading, setLoading] = useState(false)
     const handlePayment = async (price: string) => {
+        const baseURL = "https://grpac-mern.vercel.app/api/payment/";
         try {
-            const orderURL = "http://localhost:8080/api/payment/orders";
-            const { data: { data } } = await axios.post(orderURL, { amount: price });
+            const orderURL = "orders";
+            const { data: { data } } = await axios.post(baseURL + orderURL, { amount: price });
             const options = {
                 key: process.env.REACT_APP_RAZOR_PAY_KEY,
                 amount: data.amount,
@@ -21,7 +22,7 @@ export const Success: React.FC<any> = () => {
                 image: 'https://indianrailways.gov.in/railwayboard/uploads/directorate/coaching/TAG_2022-23/TAG_2022.jpg',
                 handler: async (res: any) => {
                     try {
-                        const verifyURL = "http://localhost:8080/api/payment/verify";
+                        const verifyURL = baseURL + "verify";
                         // console.log(res)
                         await axios.post(verifyURL, res);
                         const paymentData = {
