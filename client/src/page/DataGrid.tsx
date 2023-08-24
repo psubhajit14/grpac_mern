@@ -1,4 +1,4 @@
-import { Button, Input, InputRef, Space, Table, Tag } from "antd";
+import { Button, Col, Input, InputRef, Row, Space, Table, Tag } from "antd";
 import type { ColumnsType, ColumnType, TableProps } from 'antd/es/table';
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -7,11 +7,14 @@ import { firestore } from "../database/firebaseUtil";
 import * as Constants from "../data";
 import { FilterConfirmProps } from "antd/es/table/interface";
 import { BiSearchAlt } from 'react-icons/bi'
+import { FaDonate } from 'react-icons/fa'
+import { Link } from "react-router-dom";
 
 export const DataGrid: React.FC<any> = () => {
 
 
     interface DataType {
+        id: string;
         name: string;
         email: string;
         gender: string;
@@ -37,7 +40,7 @@ export const DataGrid: React.FC<any> = () => {
             snapshot = await getDocsFromCache(collection(firestore, "users"));
         }
         if (!snapshot.empty)
-            setData(snapshot?.docs.map((item: any) => item.data()));
+            setData(snapshot?.docs.map((item: any) => ({ ...item.data(), id: item.id })));
         setLoading(false)
     }, [])
 
@@ -190,6 +193,15 @@ export const DataGrid: React.FC<any> = () => {
             title: 'Pin Code',
             dataIndex: 'pin',
         },
+        {
+            title: 'Donated',
+            dataIndex: 'donated',
+        },
+        {
+            title: "Donate Now",
+            dataIndex: "id",
+            render: (value, _, __) => <Link to={`/success/${value}`}><Row justify={"space-between"} align="middle"><Col><FaDonate fontSize={24} /></Col><Col> Click here</Col></Row></Link>
+        }
     ];
 
     const onChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter, extra) => {

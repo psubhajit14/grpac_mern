@@ -22,7 +22,7 @@ export const App: React.FC<any> = () => {
             <Layout>
               <Head collapsed={collapsed} setCollapsed={setCollapsed} />
               <Body />
-              <Footer style={{ textAlign: 'center' }}><DiCodeigniter style={{ fontSize: 16 }} color='crimson' /> <Typography.Text>Developed by Subhajit Paul and ____________ ___________. <br /> Please visit <Link target="_blank" to="https://github.com/psubhajit14/GRPAC">here</Link> to know more.</Typography.Text></Footer>
+              <Footer style={{ textAlign: 'center' }}><DiCodeigniter style={{ fontSize: 16 }} color='crimson' /> <Typography.Text>Developed by Subhajit Paul and ____________ ___________. <br /> Please visit <Link target="_blank" to="https://github.com/psubhajit14/grpac_mern">here</Link> to know more.</Typography.Text></Footer>
             </Layout>
           </Layout>
         </ViewportProvider>
