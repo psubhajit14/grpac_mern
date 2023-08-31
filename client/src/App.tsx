@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ConfigProvider, Layout, Space, Typography } from 'antd';
+import { ConfigProvider, Divider, Layout, Space, Typography } from 'antd';
 import { Footer } from 'antd/es/layout/layout';
 import {
   BrowserRouter, Link,
@@ -22,7 +22,13 @@ export const App: React.FC<any> = () => {
             <Layout>
               <Head collapsed={collapsed} setCollapsed={setCollapsed} />
               <Body />
-              <Footer style={{ textAlign: 'center' }}><DiCodeigniter style={{ fontSize: 16 }} color='crimson' /> <Typography.Text>Developed by Subhajit Paul and ____________ ___________. <br /> Please visit <Link target="_blank" to="https://github.com/psubhajit14/grpac_mern">here</Link> to know more.</Typography.Text></Footer>
+              <Footer style={{ textAlign: 'center', width: '100%' }}>
+                <DiCodeigniter style={{ fontSize: 16 }} color='crimson' />
+                <Typography.Text> Developed by Subhajit Paul. Please visit
+                  <Link target="_blank" to="https://github.com/psubhajit14/grpac_mern"> here </Link>
+                  to know more.
+                </Typography.Text>
+              </Footer>
             </Layout>
           </Layout>
         </ViewportProvider>

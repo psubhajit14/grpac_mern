@@ -1,35 +1,35 @@
 export const data = {
   occupationList: [
     {
-        value: '1',
+        value: 'Govt. Employee',
         label: 'Govt. Employee',
     },
     {
-        value: '2',
+        value: 'Private Sector Employee',
         label: 'Private Sector Employee',
     },
     {
-        value: '3',
+        value: 'Retired',
         label: 'Retired',
     },
     {
-        value: '4',
+        value: 'Businessman',
         label: 'Businessman',
     },
     {
-        value: '5',
+        value: 'Self-Employed',
         label: 'Self-Employed',
     },
     {
-        value: '6',
+        value: 'Farmer',
         label: 'Farmer',
     },
     {
-        value: '7',
+        value: 'Goldsmith',
         label: 'Goldsmith',
     },
     {
-        value: '8',
+        value: 'Other',
         label: 'Other',
     },
 ],
