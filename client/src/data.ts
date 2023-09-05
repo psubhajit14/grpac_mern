@@ -29,7 +29,7 @@ export const data = {
         label: 'Goldsmith',
     },
     {
-        value: 'Other',
+        value: "Other",
         label: 'Other',
     },
 ],

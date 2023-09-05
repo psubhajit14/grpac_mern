@@ -25,11 +25,11 @@ export const Navigation: React.FC<any> = ({ collapsed }) => {
                         icon: <Link to="/dashboard"> <BsTable /></Link>,
                         key: 2,
                     },
-                    {
-                        label: 'Payment Details',
-                        icon: <MdPayment />,
-                        key: 3
-                    }
+                    // {
+                    //     label: 'Payment Details',
+                    //     icon: <MdPayment />,
+                    //     key: 3
+                    // }
                 ]}>
             </Menu>
         </Sider>

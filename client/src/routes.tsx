@@ -2,6 +2,7 @@ import { Button, Layout, Result } from "antd";
 import React from "react";
 import { Link, Route, Routes } from "react-router-dom";
 import { DataGrid } from "./page/DataGrid";
+import { Login } from "./page/Login";
 import { RegisterForm } from "./page/RegisterForm";
 import { Success } from "./page/Success";
 
@@ -10,6 +11,7 @@ export const RouterComponent: React.FC<any> = () => {
         <Routes>
             <Route index element={<RegisterForm />} />
             <Route path="dashboard" element={<DataGrid />} />
+            <Route path="user" element={<Login />} />
             <Route path="success/:refId" element={<Success />} />
             <Route path="*" element={<Result
                 status="404"

@@ -1,145 +1,13 @@
-import { Button, Col, Divider, Input, InputRef, Row, Space, Table, Tag, Typography } from "antd";
+import { Button, Divider, Input, InputRef, Row, Space, Table, Tag, Typography } from "antd";
 import type { ColumnsType, ColumnType, TableProps } from 'antd/es/table';
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 
 import { getDocs, collection, getDocsFromCache } from "@firebase/firestore"
 import { firestore } from "../database/firebaseUtil";
-import * as Constants from "../data";
 import { FilterConfirmProps } from "antd/es/table/interface";
 import { BiSearchAlt } from 'react-icons/bi'
-import { FaDonate } from 'react-icons/fa'
-import { Link } from "react-router-dom";
 import { paymentContext } from "../util/state";
-import GooglePayButton from "@google-pay/button-react";
 import { CSVLink } from "react-csv";
-/** Launches payment request flow when user taps on buy button. */
-function onBuyClicked() {
-    if (!window.PaymentRequest) {
-        console.log('Web payments are not supported in this browser.');
-        return;
-    }
-
-    // Create supported payment method.
-    const supportedInstruments: any = [
-        {
-            supportedMethods: ['https://tez.google.com/pay'],
-            data: {
-                pa: 'merchant-vpa@xxx',
-                pn: 'Merchant Name',
-                tr: '1234ABCD',  // Your custom transaction reference ID
-                url: 'https://url/of/the/order/in/your/website',
-                mc: '1234', //Your merchant category code
-                tn: 'Purchase in Merchant',
-            },
-        }
-    ];
-
-    // Create order detail data.
-    const details = {
-        total: {
-            label: 'Total',
-            amount: {
-                currency: 'INR',
-                value: '10.01', // sample amount
-            },
-        },
-        displayItems: [{
-            label: 'Original Amount',
-            amount: {
-                currency: 'INR',
-                value: '10.01',
-            },
-        }],
-    };
-
-    // Create payment request object.
-    let request: any = null;
-    try {
-        request = new PaymentRequest(supportedInstruments, details);
-    } catch (e: any) {
-        console.log('Payment Request Error: ' + e.message);
-        return;
-    }
-    if (!request) {
-        console.log('Web payments are not supported in this browser.');
-        return;
-    }
-    // Global key for canMakepayment cache.
-    const canMakePaymentCache = 'canMakePaymentCache';
-
-    /**
-     * Check whether can make payment with Google Pay or not. It will check session storage
-     * cache first and use the cache directly if it exists. Otherwise, it will call
-     * canMakePayment method from PaymentRequest object and return the result, the
-     * result will also be stored in the session storage cache for future usage.
-     *
-     * @private
-     * @param {PaymentRequest} request The payment request object.
-     * @return {Promise} a promise containing the result of whether can make payment.
-     */
-    function checkCanMakePayment(request: any) {
-        // Check canMakePayment cache, use cache result directly if it exists.
-        if (sessionStorage.hasOwnProperty(canMakePaymentCache)) {
-            return Promise.resolve(JSON.parse(sessionStorage[canMakePaymentCache]));
-        }
-
-        // If canMakePayment() isn't available, default to assume the method is
-        // supported.
-        var canMakePaymentPromise = Promise.resolve(true);
-
-        // Feature detect canMakePayment().
-        if (request.canMakePayment) {
-            canMakePaymentPromise = request.canMakePayment();
-        }
-
-        return canMakePaymentPromise
-            .then((result) => {
-                // Store the result in cache for future usage.
-                sessionStorage[canMakePaymentCache] = result;
-                return result;
-            })
-            .catch((err) => {
-                console.log('Error calling canMakePayment: ' + err);
-            });
-    }
-}
-
-/**
-* Show the payment request UI.
-*
-* @private
-* @param {PaymentRequest} request The payment request object.
-* @param {Promise} canMakePayment The promise for whether can make payment.
-*/
-function showPaymentUI(request: any, canMakePayment: any) {
-    if (!canMakePayment) {
-        //   handleNotReadyToPay();
-        return;
-    }
-
-    // Set payment timeout.
-    let paymentTimeout = window.setTimeout(function () {
-        window.clearTimeout(paymentTimeout);
-        request.abort()
-            .then(function () {
-                console.log('Payment timed out after 20 minutes.');
-            })
-            .catch(function () {
-                console.log('Unable to abort, user is in the process of paying.');
-            });
-    }, 20 * 60 * 1000); /* 20 minutes */
-
-    request.show()
-        .then(function (instrument: any) {
-
-            window.clearTimeout(paymentTimeout);
-            console.log("success")
-            // processResponse(instrument); // Handle response from browser.
-        })
-        .catch(function (err: any) {
-            console.log(err);
-        });
-}
 
 export const DataGrid: React.FC<any> = () => {
 
@@ -157,6 +25,7 @@ export const DataGrid: React.FC<any> = () => {
         donated: string;
         registration_id: string;
     }
+
     type DataIndex = keyof DataType;
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState<DataType[]>([]);
@@ -273,7 +142,8 @@ export const DataGrid: React.FC<any> = () => {
             title: 'Registration ID',
             dataIndex: 'registration_id',
             width: 150,
-            fixed: "left"
+            fixed: "left",
+            ...getColumnSearchProps('registration_id')
         },
         {
             title: 'Name',
@@ -329,7 +199,7 @@ export const DataGrid: React.FC<any> = () => {
             ...getColumnSearchProps('block')
         },
         {
-            title: 'Mouza',
+            title: 'Mouza / Village',
             dataIndex: 'mouza',
             width: 150,
             render: (value, _, __) => value?.split("] ")[1]
@@ -349,7 +219,9 @@ export const DataGrid: React.FC<any> = () => {
             dataIndex: "uuid",
             width: 100,
             render: (value, _, __) =>
-                <>{value === uid ? <Button onClick={() => { onBuyClicked() }}>Donate</Button> : null}</>
+                <>{value === uid ? <Button onClick={() => {
+                    // onBuyClicked()
+                }}>Donate</Button> : null}</>
             // <Button onClick={() => setOpenModal && setOpenModal(true)} type="primary">Donate Now</Button>
         }
     ];
@@ -374,9 +246,10 @@ export const DataGrid: React.FC<any> = () => {
         <>
             <Row align="middle" justify="space-between">
                 <Typography.Title>Dashboard</Typography.Title>
-                <Button type="primary"><CSVLink data={data} headers={headers} filename="GRPAC_DATA_Record">Export to CSV</CSVLink></Button>
             </Row>
             <Divider />
+            <Button type="primary" style={{ marginBottom: 16 }}><CSVLink data={data} headers={headers} filename="GRPAC_DATA_Record">Export to CSV</CSVLink></Button>
+
             <Table loading={loading} columns={columns} dataSource={data} onChange={onChange} rowKey="id"
                 pagination={{ pageSize: 5, hideOnSinglePage: true }}
                 showSorterTooltip

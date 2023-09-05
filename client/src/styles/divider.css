@@ -1,0 +1,6 @@
+.ant-divider-horizontal.ant-divider-with-text::before, .ant-divider-horizontal.ant-divider-with-text::after {
+    border-block-start: 1px solid white
+}
+.ant-modal .ant-modal-content {
+    padding: 4px 4px
+}
