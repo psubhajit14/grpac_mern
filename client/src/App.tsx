@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ConfigProvider, Divider, Layout, Space, Typography } from 'antd';
+import { ConfigProvider, Divider, Layout, Space, theme, Typography } from 'antd';
 import { Footer } from 'antd/es/layout/layout';
 import {
   BrowserRouter, Link,
@@ -11,18 +11,18 @@ import { DiCodeigniter } from 'react-icons/di'
 export const App: React.FC<any> = () => {
 
   const { width } = useViewport();
-  const [collapsed, setCollapsed] = useState((width < 768));
+  const [collapsed, setCollapsed] = useState(false);
 
   return (
     <ConfigProvider>
       <BrowserRouter>
         <ViewportProvider>
           <Layout>
-            <Navigation collapsed={collapsed} />
+            {width > 768 && <Navigation collapsed={collapsed} />}
             <Layout>
               <Head collapsed={collapsed} setCollapsed={setCollapsed} />
-              <Body />
-              <Footer style={{ textAlign: 'center', width: '100%' }}>
+              <Body style={{ backGroundColor: "white" }} />
+              <Footer style={{ textAlign: 'center', width: '100%', }}>
                 <DiCodeigniter style={{ fontSize: 16 }} color='crimson' />
                 <Typography.Text> Developed by Subhajit Paul. Please visit
                   <Link target="_blank" to="https://github.com/psubhajit14/grpac_mern"> here </Link>

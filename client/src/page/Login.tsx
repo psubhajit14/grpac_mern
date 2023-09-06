@@ -1,12 +1,13 @@
 import React from "react";
 
-import { auth, logInWithEmailAndPassword, signInWithGoogle } from "../database/firebaseUtil";
+import { auth } from "../database/firebaseUtil";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Button, Card, Col, Divider, Form, Input, Modal, Row, Typography } from "antd";
 import { IoCaretBackCircleOutline } from 'react-icons/io5'
 import { useNavigate } from "react-router-dom";
 import '../styles/divider.css'
 import { FcGoogle } from 'react-icons/fc'
+import { signInWithGoogle } from "../database/authUtil";
 
 export const Login: React.FC<any> = () => {
 
@@ -58,7 +59,7 @@ export const Login: React.FC<any> = () => {
                             </Col>
                             <Col span={12}>
                                 <Form.Item wrapperCol={{ span: 24 }}>
-                                    <Button type="default" style={{ "width": "100%" }} icon={<FcGoogle size={24} />} />
+                                    <Button type="default" style={{ "width": "100%" }} icon={<FcGoogle size={24} />} onClick={signInWithGoogle} />
                                 </Form.Item>
                             </Col>
                         </Row>

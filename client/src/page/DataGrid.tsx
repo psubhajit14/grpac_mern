@@ -3,14 +3,26 @@ import type { ColumnsType, ColumnType, TableProps } from 'antd/es/table';
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 
 import { getDocs, collection, getDocsFromCache } from "@firebase/firestore"
-import { firestore } from "../database/firebaseUtil";
+import { auth, firestore } from "../database/firebaseUtil";
 import { FilterConfirmProps } from "antd/es/table/interface";
 import { BiSearchAlt } from 'react-icons/bi'
 import { paymentContext } from "../util/state";
 import { CSVLink } from "react-csv";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useNavigate } from "react-router-dom";
 
 export const DataGrid: React.FC<any> = () => {
 
+
+    const [user, error] = useAuthState(auth);
+    const navigate = useNavigate();
+    useEffect(() => {
+        if (user != null) {
+            console.log(user)
+        } else {
+            navigate("/user", { replace: true })
+        }
+    }, [user])
     interface DataType {
         id: string;
         name: string;
@@ -209,11 +221,11 @@ export const DataGrid: React.FC<any> = () => {
             dataIndex: 'pin',
             width: 100,
         },
-        {
-            title: 'Donated',
-            dataIndex: 'donated',
-            width: 100,
-        },
+        // {
+        //     title: 'Donated',
+        //     dataIndex: 'donated',
+        //     width: 100,
+        // },
         {
             title: "Action",
             dataIndex: "uuid",
@@ -240,7 +252,7 @@ export const DataGrid: React.FC<any> = () => {
         { label: 'Block', key: 'block' },
         { label: 'Mouza', key: 'mouza' },
         { label: 'PIN Code', key: 'pin' },
-        { label: 'Donated', key: 'donated' },
+        // { label: 'Donated', key: 'donated' },
     ];
     return (
         <>

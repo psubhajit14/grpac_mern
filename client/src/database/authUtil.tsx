@@ -1,5 +1,6 @@
-import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
-import { auth } from "./firebaseUtil";
+import { createUserWithEmailAndPassword, getRedirectResult, GoogleAuthProvider, RecaptchaVerifier, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPhoneNumber, signInWithPopup, signInWithRedirect, signOut } from "firebase/auth";
+import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
+import { auth, firestore } from "./firebaseUtil";
 
 
 export const onCaptchVerify = (
@@ -64,3 +65,66 @@ export const onOTPVerify = (
             setLoading(false);
         });
 }
+
+const adminRef = collection(firestore, "admins")
+
+const googleProvider = new GoogleAuthProvider();
+export const signInWithGoogle = async () => {
+    try {
+        await signInWithRedirect(auth, googleProvider);
+        const res = await getRedirectResult(auth)
+        const user = res?.user as any;
+        const q = query(adminRef, where("uid", "==", user.uid));
+        const docs = await getDocs(q);
+        if (docs.docs.length === 0) {
+            await addDoc(adminRef, {
+                uid: user.uid,
+                name: user.displayName,
+                authProvider: "google",
+                email: user.email,
+            });
+        }
+    } catch (err: any) {
+        console.error(err);
+        alert(err.message);
+    }
+};
+
+export const registerWithEmailAndPassword = async (name: string, email: string, password: string) => {
+    try {
+        const res = await createUserWithEmailAndPassword(auth, email, password);
+        const user = res.user;
+        await addDoc(adminRef, {
+            uid: user.uid,
+            name,
+            authProvider: "local",
+            email,
+        });
+    } catch (err: any) {
+        console.error(err);
+        alert(err.message);
+    }
+};
+
+export const logInWithEmailAndPassword = async (email: string, password: string) => {
+    try {
+        await signInWithEmailAndPassword(auth, email, password);
+    } catch (err: any) {
+        console.error(err);
+        alert(err.message);
+    }
+};
+
+export const sendPasswordReset = async (email: string) => {
+    try {
+        await sendPasswordResetEmail(auth, email);
+        alert("Password reset link sent!");
+    } catch (err: any) {
+        console.error(err);
+        alert(err.message);
+    }
+};
+
+export const logout = () => {
+    signOut(auth);
+};
