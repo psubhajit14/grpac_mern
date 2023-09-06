@@ -1,4 +1,4 @@
-import { Form, Input, Radio, Select, Button, message, Space, Typography, Row, Col } from "antd"
+import { Form, Input, Radio, Select, Button, message, Typography, Row, Col } from "antd"
 import { data } from "../data"
 
 import { createRecord } from "../database/firebaseUtil"
@@ -6,7 +6,7 @@ import { useCallback, useContext, useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useViewport } from "../util"
 import { paymentContext } from "../util/state"
-import { onSignup } from "../database/authUtil"
+import { Ad } from "../ads/Ad"
 
 
 
@@ -20,14 +20,13 @@ export const RegisterForm: React.FC<any> = () => {
     const { resetFields, setFieldValue, validateFields } = formInstance;
     const [loading, setLoading] = useState(false)
     const { width } = useViewport();
-    const [active, setActive] = useState(true);
     const [otherInput, setOtherInput] = useState(false)
 
     const { uid, setUid } = useContext(paymentContext);
     useEffect(() => {
         setUid && setUid(undefined)
         resetFields()
-    }, [])
+    }, [resetFields, setUid])
 
     const handleSubmit = useCallback((testdata: any) => {
         testdata = {
@@ -50,7 +49,7 @@ export const RegisterForm: React.FC<any> = () => {
             message.error(error.message, 2);
         }
         createRecord(testdata, setLoading, onSuccess, onError)
-    }, [inputRef])
+    }, [inputRef, resetFields, navigate])
 
     useEffect(() => {
         (async () => {
@@ -59,7 +58,7 @@ export const RegisterForm: React.FC<any> = () => {
                 await validateFields().then(() => { }, () => { });
             }
         })()
-    }, [uid, setFieldValue])
+    }, [uid, setFieldValue, validateFields])
 
     return (
         <><Row justify={width > 768 ? "center" : "start"} style={{
@@ -75,7 +74,6 @@ export const RegisterForm: React.FC<any> = () => {
                         scrollToFirstError
                         onFieldsChange={(_, fields: any) => {
                             console.log(fields.find((item: any) => item.name[0] === "occupation"))
-                            setActive(fields.find((item: any) => item.name[0] === 'mobileNo').errors.length !== 0)
                         }}
                     >
                         <Form.Item name='name' label="Fullname" rules={[
@@ -180,14 +178,14 @@ export const RegisterForm: React.FC<any> = () => {
                                     (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
                                 }
                                 options={data.blocks?.find((item: any) =>
-                                    item.district == district
+                                    item.district === district
                                 )?.blockList}
                             />
                         </Form.Item>
                         <Form.Item name='mouza' label="Mouza / Village" rules={[
                             { required: true, message: 'Mouza is required!' },
                         ]} hasFeedback>
-                            {data.mouzas?.find((item: any) => item.block == block)
+                            {data.mouzas?.find((item: any) => item.block === block)
                                 ? <Select
                                     showSearch
                                     placeholder="Search to Select"
@@ -197,7 +195,7 @@ export const RegisterForm: React.FC<any> = () => {
                                         (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
                                     }
                                     options={data.mouzas?.find((item: any) =>
-                                        item.block == block
+                                        item.block === block
                                     )?.mouzaList}
                                 /> : <Input />
                             }
@@ -214,25 +212,25 @@ export const RegisterForm: React.FC<any> = () => {
                         </Form.Item>
                     </Form>
                 </Col>
-                <Col span={width > 768 ? 4 : 6}>
-                    <span dangerouslySetInnerHTML={{
+                {/* <Col span={width > 768 ? 4 : 6}>
+                    <Ad dangerouslySetInnerHTML={{
                         __html: `<ins class="adsbygoogle"
                             style="display:block"
                             data-ad-client="ca-pub-3724971157141240"
                             data-ad-slot="1556359985"
                             data-ad-format="auto"
                             data-full-width-responsive="true"></ins>`}} />
-                </Col>
+                </Col> */}
             </Row>
-            <Row>
-                <span dangerouslySetInnerHTML={{
+            {/* <Row>
+                <Ad dangerouslySetInnerHTML={{
                     __html: `<ins class="adsbygoogle"
                         style="display:block"
                         data-ad-client="ca-pub-3724971157141240"
                         data-ad-slot="5813500897"
                         data-ad-format="auto"
                         data-full-width-responsive="true"></ins>`}} />
-            </Row>
+            </Row> */}
         </>
     )
 } 
