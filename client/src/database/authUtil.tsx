@@ -1,6 +1,7 @@
+import { message } from "antd";
 import { createUserWithEmailAndPassword, getRedirectResult, GoogleAuthProvider, RecaptchaVerifier, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPhoneNumber, signInWithPopup, signInWithRedirect, signOut } from "firebase/auth";
-import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
-import { auth, firestore } from "./firebaseUtil";
+import { collection, query, where, getDocs, addDoc, doc, getDoc, updateDoc, setDoc, documentId } from "firebase/firestore";
+import { auth, checkUserExists, firestore } from "./firebaseUtil";
 
 
 export const onCaptchVerify = (
@@ -69,21 +70,35 @@ export const onOTPVerify = (
 const adminRef = collection(firestore, "admins")
 
 const googleProvider = new GoogleAuthProvider();
-export const signInWithGoogle = async () => {
+
+export const isAdmin = async (uid: string) => {
+    console.log("uid isAdmin", uid)
+    const docRef = doc(firestore, `admins/${uid}`);
+    const document = await getDoc(docRef);
+    if (!document.exists()) {
+        message.error("You do not have permisson, Please Request Admin for access this page !", 2);
+        return false;
+    } else {
+        return document.data().isAdmin;
+    }
+}
+
+export const signInWithGoogle = async (
+    onSuccess: () => void
+) => {
     try {
-        await signInWithRedirect(auth, googleProvider);
-        const res = await getRedirectResult(auth)
-        const user = res?.user as any;
-        const q = query(adminRef, where("uid", "==", user.uid));
-        const docs = await getDocs(q);
-        if (docs.docs.length === 0) {
-            await addDoc(adminRef, {
-                uid: user.uid,
+        const res = await signInWithPopup(auth, googleProvider);
+        const user = res?.user;
+        const docRef = doc(firestore, `admins/${user.uid}`);
+        const document = await getDoc(docRef);
+        if (!document.exists()) {
+            await setDoc(docRef, {
                 name: user.displayName,
                 authProvider: "google",
                 email: user.email,
-            });
+            })
         }
+        onSuccess();
     } catch (err: any) {
         console.error(err);
         alert(err.message);
@@ -126,5 +141,6 @@ export const sendPasswordReset = async (email: string) => {
 };
 
 export const logout = () => {
+    localStorage.clear()
     signOut(auth);
 };

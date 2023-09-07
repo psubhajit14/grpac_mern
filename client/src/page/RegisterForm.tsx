@@ -53,9 +53,10 @@ export const RegisterForm: React.FC<any> = () => {
         <><Row justify={width > 768 ? "center" : "start"} style={{
             marginBottom: width > 468 ? 24 : 0
         }}><Typography.Title>Registration Form</Typography.Title></Row>
-            <Form style={{ width: "100%" }}
+
+            <Form style={{ width: "80%" }}
                 layout={width > 768 ? "horizontal" : "vertical"}
-                labelCol={{ span: 6 }} wrapperCol={{ span: 18 }}
+                labelCol={{ span: width > 768 ? 6 : 24 }} wrapperCol={{ span: width > 768 ? 18 : 24 }}
                 onFinish={(val) => handleSubmit(val)}
                 form={formInstance}
                 scrollToFirstError
@@ -89,11 +90,7 @@ export const RegisterForm: React.FC<any> = () => {
                         { required: true, message: 'Mobile No is required!' },
                         { pattern: RegExp("^\\d{10}$"), message: "Mobile No should be 10 digit!" },
                     ]} hasFeedback >
-                    <Input style={{
-                        ".ant-input-group-addon": {
-                            backgroundColor: "white"
-                        }
-                    } as any} addonBefore="+91" type='number' inputMode="tel"
+                    <Input addonBefore="+91" type='number' inputMode="tel"
                     // onChange={() => {
                     //     setUid && setUid(undefined);
                     //     setFieldValue("uuid", undefined)
@@ -152,7 +149,7 @@ export const RegisterForm: React.FC<any> = () => {
                         options={data.districtList}
                     />
                 </Form.Item>
-                <Form.Item name='block' label="Block" rules={[
+                <Form.Item name='block' label="Municipality / Block" rules={[
                     { required: true, message: 'Block is required!' }
                 ]} hasFeedback>
                     <Select
@@ -169,9 +166,7 @@ export const RegisterForm: React.FC<any> = () => {
                         )?.blockList}
                     />
                 </Form.Item>
-                <Form.Item name='mouza' label="Mouza / Village" rules={[
-                    { required: true, message: 'Mouza is required!' },
-                ]} hasFeedback>
+                <Form.Item name='mouza' label="Mouza / Village" hasFeedback>
                     {data.mouzas?.find((item: any) => item.block === block)
                         ? <Select
                             showSearch

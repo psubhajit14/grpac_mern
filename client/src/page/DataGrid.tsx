@@ -1,4 +1,4 @@
-import { Button, Divider, Input, InputRef, Row, Space, Table, Tag, Typography } from "antd";
+import { Button, Divider, Input, InputRef, message, Result, Row, Space, Table, Tag, Typography } from "antd";
 import type { ColumnsType, ColumnType, TableProps } from 'antd/es/table';
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 
@@ -9,12 +9,13 @@ import { BiSearchAlt } from 'react-icons/bi'
 import { paymentContext } from "../util/state";
 import { CSVLink } from "react-csv";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { isAdmin } from "../database/authUtil";
 
 export const DataGrid: React.FC<any> = () => {
 
 
-    const [user, error] = useAuthState(auth);
+    const [user] = useAuthState(auth);
     const navigate = useNavigate();
     useEffect(() => {
         if (user != null) {
@@ -41,21 +42,27 @@ export const DataGrid: React.FC<any> = () => {
     type DataIndex = keyof DataType;
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState<DataType[]>([]);
-    const { setOpenModal, uid } = useContext(paymentContext)
+    const { uid } = useContext(paymentContext)
+    const [admin, setAdmin] = useState(false);
     const getDBData = useCallback(async () => {
-        setLoading(true)
-        let snapshot: any;
-        try {
-            snapshot = await getDocs(collection(firestore, "users"));
+        if (await isAdmin(user?.uid || " ")) {
+            setLoading(true)
+            let snapshot: any;
+            try {
+                snapshot = await getDocs(collection(firestore, "users"));
+            }
+            catch (e) {
+                snapshot = await getDocsFromCache(collection(firestore, "users"));
+            }
+            if (!snapshot.empty)
+                setData(snapshot?.docs.map((item: any) => ({ ...item.data(), id: item.id })));
+            setLoading(false)
+            setAdmin(true)
+        } else {
+            message.error("You do not have access to this page", 5)
         }
-        catch (e) {
-            snapshot = await getDocsFromCache(collection(firestore, "users"));
-        }
-        if (!snapshot.empty)
-            setData(snapshot?.docs.map((item: any) => ({ ...item.data(), id: item.id })));
-        setLoading(false)
-    }, [])
 
+    }, [user])
 
     useEffect(() => {
         getDBData();
@@ -231,7 +238,7 @@ export const DataGrid: React.FC<any> = () => {
             dataIndex: "uuid",
             width: 100,
             render: (value, _, __) =>
-                <>{value === uid ? <Button onClick={() => {
+                <>{uid && value === uid ? <Button onClick={() => {
                     // onBuyClicked()
                 }}>Donate</Button> : null}</>
             // <Button onClick={() => setOpenModal && setOpenModal(true)} type="primary">Donate Now</Button>
@@ -256,23 +263,35 @@ export const DataGrid: React.FC<any> = () => {
     ];
     return (
         <>
-            <Row align="middle" justify="space-between">
-                <Typography.Title>Dashboard</Typography.Title>
-            </Row>
-            <Divider />
-            <Button type="primary" style={{ marginBottom: 16 }}><CSVLink data={data} headers={headers} filename="GRPAC_DATA_Record">Export to CSV</CSVLink></Button>
+            {
+                !admin ?
 
-            <Table loading={loading} columns={columns} dataSource={data} onChange={onChange} rowKey="id"
-                pagination={{ pageSize: 5, hideOnSinglePage: true }}
-                showSorterTooltip
-                scroll={{ x: 1500, y: 600 }}
-                summary={(data: readonly DataType[]) => (
-                    searchText &&
-                    <Table.Summary.Row>
-                        <Table.Summary.Cell index={0} colSpan={10}>Showing result for {searchedColumn} containing : "{searchText}"</Table.Summary.Cell>
-                    </Table.Summary.Row>
-                )}
-            />
+                    <Result
+                        status="403"
+                        title={`Hi ${user?.displayName}`}
+                        subTitle="Sorry, you are not authorized to access this page."
+                        extra={<Button type="primary"><Link to="/">Back Home</Link></Button>}
+                    />
+
+                    :
+                    <>
+                        <Row align="middle" justify="space-between">
+                            <Typography.Title>Dashboard</Typography.Title>
+                        </Row>
+                        <Divider />
+                        <Button type="primary" style={{ marginBottom: 16 }}><CSVLink data={data} headers={headers} filename="GRPAC_DATA_Record">Export to CSV</CSVLink></Button>
+
+                        <Table loading={loading} columns={columns} dataSource={data} onChange={onChange} rowKey="id"
+                            pagination={{ pageSize: 5, hideOnSinglePage: true }}
+                            showSorterTooltip
+                            scroll={{ x: 1500, y: 600 }}
+                            summary={(data: readonly DataType[]) => (
+                                searchText &&
+                                <Table.Summary.Row>
+                                    <Table.Summary.Cell index={0} colSpan={10}>Showing result for {searchedColumn} containing : "{searchText}"</Table.Summary.Cell>
+                                </Table.Summary.Row>
+                            )}
+                        /></>}
         </>
     );
 }

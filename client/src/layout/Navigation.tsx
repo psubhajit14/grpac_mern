@@ -1,23 +1,27 @@
 import { DownOutlined } from "@ant-design/icons"
 import { Typography, Menu, Dropdown, MenuProps, Space, Button } from "antd"
 import Sider from "antd/es/layout/Sider"
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import { RxPerson } from "react-icons/rx"
 import { BsPerson, BsPersonFill, BsTable } from "react-icons/bs"
 import { MdDetails, MdLogout, MdPayment, MdPerson } from "react-icons/md"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { GiHamburgerMenu } from 'react-icons/gi'
-import { TbListDetails, TbHome2 } from 'react-icons/tb'
+import { TbListDetails, TbHome2, TbLogout, TbLogin } from 'react-icons/tb'
+import { logout } from "../database/authUtil"
+import { useAuthState } from "react-firebase-hooks/auth"
+import { auth } from "../database/firebaseUtil"
 
 export const Navigation: React.FC<any> = ({ collapsed }) => {
 
+    const [user] = useAuthState(auth);
     return (
         <Sider collapsible collapsed={collapsed} style={{ padding: 0 }}>
             <Typography.Title style={{ textAlign: 'center', fontSize: 24, color: 'white' }}>{collapsed ? null : "GRPAC"}</Typography.Title>
             <Menu
                 style={{ minHeight: "90vh" }}
                 theme="dark"
-                defaultValue={1}
+                selectable={false}
                 items={
                     [
                         {
@@ -30,11 +34,11 @@ export const Navigation: React.FC<any> = ({ collapsed }) => {
                             icon: <Link to="/dashboard"> <BsTable /></Link>,
                             key: 2,
                         },
-                        // {
-                        //     label: 'Payment Details',
-                        //     icon: <MdPayment />,
-                        //     key: 3
-                        // }
+                        {
+                            label: (user ? 'Logout' : 'Log in'),
+                            icon: (user ? <Link to="/user" onClick={() => logout()}><TbLogout /></Link> : <Link to="/user"><TbLogin /></Link>),
+                            key: 3
+                        }
                     ]} >
             </Menu >
         </Sider>
@@ -61,12 +65,12 @@ export const NavigationMobile: React.FC<any> = () => {
             key: 3,
             children: [
                 {
-                    key: '2-1',
+                    key: '3-1',
                     label: 'User Profile',
                     icon: <TbListDetails />
                 },
                 {
-                    key: '2-2',
+                    key: '3-2',
                     label: 'Logout',
                     icon: <MdLogout />
                 },
@@ -83,6 +87,10 @@ export const NavigationMobile: React.FC<any> = () => {
                     break;
                 case "2":
                     navigate("/dashboard");
+                    break;
+                case "3-2":
+                    logout();
+                    navigate("/user");
                     break;
                 default:
                     break;

@@ -73,9 +73,9 @@ export const Success: React.FC<any> = () => {
                         icon: <IoCopyOutline size={24} />,
                     }} style={{ fontSize: width > 768 ? 30 : 20 }}>{regID}</Typography.Text>}
                     extra={[
-                        <Button key="donate" type="primary" >
-                            <Typography.Link href="https://okcr.in/06ALwwW" target="_blank">Donate now</Typography.Link>
-                        </Button>,
+                        // <Button key="donate" type="primary" >
+                        //     <Typography.Link href="https://okcr.in/06ALwwW" target="_blank">Donate now</Typography.Link>
+                        // </Button>,
                         <Link key="home" to="/"><Button type="primary">Go to Home</Button></Link>,
                     ]}
                 />
