@@ -4,7 +4,7 @@ import Sider from "antd/es/layout/Sider"
 import { useCallback, useState } from "react"
 import { RxPerson } from "react-icons/rx"
 import { BsPerson, BsPersonFill, BsTable } from "react-icons/bs"
-import { MdDetails, MdLogout, MdPayment, MdPerson } from "react-icons/md"
+import { MdDetails, MdLogin, MdLogout, MdPayment, MdPerson } from "react-icons/md"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { GiHamburgerMenu } from 'react-icons/gi'
 import { TbListDetails, TbHome2, TbLogout, TbLogin } from 'react-icons/tb'
@@ -48,6 +48,8 @@ export const Navigation: React.FC<any> = ({ collapsed }) => {
 
 export const NavigationMobile: React.FC<any> = () => {
     const navigate = useNavigate();
+    const [user] = useAuthState(auth);
+
     const items: MenuProps['items'] = [
         {
             label: 'Home',
@@ -71,8 +73,8 @@ export const NavigationMobile: React.FC<any> = () => {
                 },
                 {
                     key: '3-2',
-                    label: 'Logout',
-                    icon: <MdLogout />
+                    label: user !== null ? 'Logout' : 'Login',
+                    icon: user !== null ? <MdLogout /> : <MdLogin />
                 },
             ],
         }
@@ -89,7 +91,9 @@ export const NavigationMobile: React.FC<any> = () => {
                     navigate("/dashboard");
                     break;
                 case "3-2":
-                    logout();
+                    if (user) {
+                        logout();
+                    }
                     navigate("/user");
                     break;
                 default:

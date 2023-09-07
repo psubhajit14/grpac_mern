@@ -1,18 +1,33 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 
-import { auth } from "../database/firebaseUtil";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { Button, Card, Col, Divider, Form, Input, message, Modal, Row, Space, Typography } from "antd";
+import { Button, Col, Divider, Form, Input, message, Modal, Row, Typography } from "antd";
 import { IoCaretBackCircleOutline } from 'react-icons/io5'
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import '../styles/divider.css'
 import { FcGoogle } from 'react-icons/fc'
-import { signInWithGoogle } from "../database/authUtil";
-import { paymentContext } from "../util/state";
+import { logInWithEmailAndPassword, registerWithEmailAndPassword, sendPasswordReset, signInWithGoogle } from "../database/authUtil";
 
 export const Login: React.FC<any> = () => {
     const navigate = useNavigate();
     const [formType, setFormType] = useState<"Login" | "Sign Up" | "Reset Password">("Login")
+    const onSuccess = () => {
+        navigate("/dashboard")
+    }
+    const handleSubmit = useCallback((val: any) => {
+        switch (formType) {
+            case "Login":
+                logInWithEmailAndPassword(val?.email, val?.password, onSuccess);
+                break;
+            case "Sign Up":
+                registerWithEmailAndPassword(val?.name, val?.email, val?.password, onSuccess);
+                break;
+            case "Reset Password":
+                sendPasswordReset(val?.email, () => setFormType("Login"))
+                break;
+            default:
+                return
+        }
+    }, [formType])
     return (
         <>
             <Modal
@@ -25,8 +40,8 @@ export const Login: React.FC<any> = () => {
                 <Col span={24} style={{ padding: '0px 24px' }}>
                     <Button type="primary" style={{ padding: "5px", overflow: "visible", "borderRadius": "50%" }} onClick={() => navigate("/", { replace: true })} icon={<IoCaretBackCircleOutline size={"20px"} />} />
                     <Typography.Title style={{ fontSize: 32 }}>{formType}</Typography.Title>
-                    <Form style={{ paddingTop: '24px' }} onFinish={(val) => { console.log(val) }}>
-                        {formType != "Reset Password" && <Form.Item name="name" rules={[
+                    <Form style={{ paddingTop: '24px' }} onFinish={(val) => { handleSubmit(val) }}>
+                        {formType == "Sign Up" && <Form.Item name="name" rules={[
                             {
                                 required: true, message: "Please enter Your Name!"
                             }]} hasFeedback>
@@ -41,7 +56,7 @@ export const Login: React.FC<any> = () => {
                             }]} hasFeedback>
                             <Input type="email" placeholder="Email-ID" />
                         </Form.Item >
-                        {formType == "Sign Up" && <Form.Item name="password"
+                        {formType !== "Reset Password" && <Form.Item name="password"
                             rules={[
                                 {
                                     required: true, message: "Please enter your password!"
@@ -57,7 +72,7 @@ export const Login: React.FC<any> = () => {
                             <Button type="primary" htmlType="submit" style={{ width: '100%' }}>{formType}</Button>
                         </Form.Item>
 
-                        <Row justify={"space-between"} style={{ margin: 0, padding: '8px 0px' }}><Typography.Link strong onClick={() => setFormType("Reset Password")}>Forgot Password ?</Typography.Link>
+                        <Row justify={"space-between"} style={{ margin: 0, padding: '8px 0px' }}>{formType !== "Reset Password" ? <Typography.Link strong onClick={() => setFormType("Reset Password")}>Forgot Password ?</Typography.Link> : <Typography.Text></Typography.Text>}
                             {formType === "Login" ?
                                 <Typography.Paragraph strong>Not a user ? <Typography.Link underline onClick={() => setFormType("Sign Up")}>Sign Up</Typography.Link></Typography.Paragraph>
                                 : <Typography.Paragraph strong>Already a user ? <Typography.Link underline onClick={() => setFormType("Login")}>Sign In</Typography.Link></Typography.Paragraph>

@@ -58,8 +58,6 @@ export const DataGrid: React.FC<any> = () => {
                 setData(snapshot?.docs.map((item: any) => ({ ...item.data(), id: item.id })));
             setLoading(false)
             setAdmin(true)
-        } else {
-            message.error("You do not have access to this page", 5)
         }
 
     }, [user])
@@ -268,7 +266,7 @@ export const DataGrid: React.FC<any> = () => {
 
                     <Result
                         status="403"
-                        title={`Hi ${user?.displayName}`}
+                        title={`Hi ${user?.displayName || "Guest"}`}
                         subTitle="Sorry, you are not authorized to access this page."
                         extra={<Button type="primary"><Link to="/">Back Home</Link></Button>}
                     />

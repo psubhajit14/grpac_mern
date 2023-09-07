@@ -1,5 +1,6 @@
 import { message } from "antd";
-import { createUserWithEmailAndPassword, getRedirectResult, GoogleAuthProvider, RecaptchaVerifier, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPhoneNumber, signInWithPopup, signInWithRedirect, signOut } from "firebase/auth";
+import { FirebaseError } from "firebase/app";
+import { createUserWithEmailAndPassword, getRedirectResult, GoogleAuthProvider, RecaptchaVerifier, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPhoneNumber, signInWithPopup, signInWithRedirect, signOut, updateCurrentUser } from "firebase/auth";
 import { collection, query, where, getDocs, addDoc, doc, getDoc, updateDoc, setDoc, documentId } from "firebase/firestore";
 import { auth, checkUserExists, firestore } from "./firebaseUtil";
 
@@ -101,11 +102,11 @@ export const signInWithGoogle = async (
         onSuccess();
     } catch (err: any) {
         console.error(err);
-        alert(err.message);
+        message.error((err as FirebaseError).code.split("/")[1])
     }
 };
 
-export const registerWithEmailAndPassword = async (name: string, email: string, password: string) => {
+export const registerWithEmailAndPassword = async (name: string, email: string, password: string, onSuccess: () => void) => {
     try {
         const res = await createUserWithEmailAndPassword(auth, email, password);
         const user = res.user;
@@ -115,32 +116,39 @@ export const registerWithEmailAndPassword = async (name: string, email: string, 
             authProvider: "local",
             email,
         });
+
+        message.success("New user registered successfully!", 5);
+        onSuccess();
     } catch (err: any) {
         console.error(err);
-        alert(err.message);
+        message.error((err as FirebaseError).code.split("/")[1])
     }
 };
 
-export const logInWithEmailAndPassword = async (email: string, password: string) => {
+export const logInWithEmailAndPassword = async (email: string, password: string, onSuccess: () => void) => {
     try {
         await signInWithEmailAndPassword(auth, email, password);
+        message.success("Logged in with email-id successfully!", 5);
+        onSuccess();
     } catch (err: any) {
         console.error(err);
-        alert(err.message);
+        message.error((err as FirebaseError).code.split("/")[1])
     }
 };
 
-export const sendPasswordReset = async (email: string) => {
+export const sendPasswordReset = async (email: string, onSuccess: () => void) => {
     try {
         await sendPasswordResetEmail(auth, email);
-        alert("Password reset link sent!");
+        message.success("Email has been sent successfully!", 5);
+        onSuccess();
     } catch (err: any) {
         console.error(err);
-        alert(err.message);
+        message.error((err as FirebaseError).code.split("/")[1])
     }
 };
 
 export const logout = () => {
     localStorage.clear()
     signOut(auth);
+    message.success("Logged out successfully!", 5)
 };
