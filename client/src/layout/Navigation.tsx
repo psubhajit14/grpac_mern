@@ -62,21 +62,9 @@ export const NavigationMobile: React.FC<any> = () => {
             key: 2,
         },
         {
-            label: 'User',
-            icon: <RxPerson size={16} />,
-            key: 3,
-            children: [
-                {
-                    key: '3-1',
-                    label: 'User Profile',
-                    icon: <TbListDetails />
-                },
-                {
-                    key: '3-2',
-                    label: user !== null ? 'Logout' : 'Login',
-                    icon: user !== null ? <MdLogout /> : <MdLogin />
-                },
-            ],
+            label: user !== null ? 'Logout' : 'Login',
+            icon: user !== null ? <MdLogout /> : <MdLogin />,
+            key: 3
         }
     ]
     const menuProps = {
@@ -90,7 +78,7 @@ export const NavigationMobile: React.FC<any> = () => {
                 case "2":
                     navigate("/dashboard");
                     break;
-                case "3-2":
+                case "3":
                     if (user) {
                         logout();
                     }

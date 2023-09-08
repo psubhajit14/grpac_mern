@@ -1,0 +1,59 @@
+{
+    "registration_form": {
+        "title": "Registration Form" ,
+        "name" : {
+            "label": "Fullname"
+        },
+        "email" : {
+            "label": "Email-ID"
+        },
+        "gender": {
+            "label" : "Gender",
+            "option" : {
+                "male": "Male",
+                "female" : "Female"
+            }
+        },
+        "mobileNo" : {
+            "label": "Mobile No"
+        },
+        "occupation" : {
+            "label": "Occupation",
+            "option": {
+                "1": "Govt. Employee",
+                "2": "Private Sector Employee",
+                "3": "Retired",
+                "4": "Businessman",
+                "5": "Self-Employed",
+                "6": "Farmer",
+                "7": "Goldsmith",
+                "8": "Other"
+            }
+        },
+        "district" : {
+            "label": "District"
+        },
+        "block" : {
+            "label": "Municipality / Block"
+        },
+        "mouza" : {
+            "label": "Mouza / Village"
+        },
+        "pin" : {
+            "label": "Pin Code"
+        },
+        "register": "Register"
+    }, 
+    "success": {
+        "title" : "Successfully Registered in 'GRPAC' with reference number:",
+        "home": "Go to Home",
+        "donate": "Donate now",
+        "drawer": {
+            "title": "Voluntary contribution in GRPAC",
+            "subtitle": "Please scan or click on the QR code.",
+            "subtitle2": "Minimum amount: Rs.100/-",
+            "button": "Click to Upload",
+            "message": "Upload your transaction screenshot"
+        }
+    }
+}

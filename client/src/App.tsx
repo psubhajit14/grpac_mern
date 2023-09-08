@@ -25,7 +25,7 @@ export const App: React.FC<any> = () => {
               <Footer style={{ textAlign: 'center', width: '100%', }}>
                 <DiCodeigniter style={{ fontSize: 16 }} color='crimson' />
                 <Typography.Text> Developed by Subhajit Paul. Please visit
-                  <Link target="_blank" to="https://github.com/psubhajit14/grpac_mern"> here </Link>
+                  <Link target="_blank" to="https://github.com/psubhajit14/grpac_mern"><b> here </b></Link>
                   to know more.
                 </Typography.Text>
               </Footer>
