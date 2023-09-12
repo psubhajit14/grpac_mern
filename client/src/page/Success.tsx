@@ -1,14 +1,15 @@
-import { Alert, Button, Col, Drawer, message, QRCode, Result, Row, Skeleton, Space, Typography, Upload, UploadProps } from "antd"
+import { Alert, Button, Col, Drawer, Form, message, QRCode, Result, Row, Skeleton, Space, Typography, Upload, UploadProps } from "antd"
 // import axios from "axios";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom"
-import { checkUserExists } from "../database/firebaseUtil";
+import { checkUserExists, createPayment, customUpload } from "../database/firebaseUtil";
 import { useViewport } from "../util";
 import { IoCopyOutline } from 'react-icons/io5'
 import { useTranslation } from "react-i18next";
 import '../styles/qrcode.css'
 import LOGO from '../assets/logo.png'
 import { UploadOutlined } from "@ant-design/icons";
+import { ImageCompressor } from "../util/fileCompress";
 // import { updateRecord } from "../database/firebaseUtil";
 
 export const Success: React.FC<any> = () => {
@@ -16,7 +17,7 @@ export const Success: React.FC<any> = () => {
     const [t] = useTranslation('common', { keyPrefix: 'success' });
 
     const [loading, setLoading] = useState(false);
-    const [regID, setRegID] = useState("");
+    const [regID, setRegID] = useState("GRPAC-000010");
     // const [loading, setLoading] = useState(false)
     // const handlePayment = async (price: string) => {
     //     const baseURL = "https://grpac-mern.vercel.app/api/payment/";
@@ -56,17 +57,17 @@ export const Success: React.FC<any> = () => {
     //     }
     // }
     const navigate = useNavigate();
-    useEffect(() => {
-        checkUserExists(refId as string)
-            .then((document: any) => {
-                setLoading(false)
-                if (!document.exists()) {
-                    navigate("/")
-                } else {
-                    setRegID(document.data().registration_id);
-                }
-            }).catch((error: any) => navigate("/"))
-    }, [refId])
+    // useEffect(() => {
+    //     checkUserExists(refId as string)
+    //         .then((document: any) => {
+    //             setLoading(false)
+    //             if (!document.exists()) {
+    //                 navigate("/")
+    //             } else {
+    //                 setRegID(document.data().registration_id);
+    //             }
+    //         }).catch((error: any) => navigate("/"))
+    // }, [refId])
     const { width } = useViewport();
     const [open, setOpen] = useState(false);
     const showDrawer = () => {
@@ -75,24 +76,67 @@ export const Success: React.FC<any> = () => {
     const onClose = () => {
         setOpen(false);
     };
-    const [files, setFile] = useState<any[]>();
-    const props: UploadProps = {
-        name: 'file',
-        action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-        headers: {
-            authorization: 'authorization-text',
-        },
-        onChange(info) {
-            if (info.file.status !== 'uploading') {
-                console.log(info.file, info.fileList);
-            }
-            if (info.file.status === 'done') {
-                message.success(`${info.file.name} file uploaded successfully`);
-            } else if (info.file.status === 'error') {
-                message.error(`${info.file.name} file upload failed.`);
-            }
-        },
+
+
+    const DrawerContent = () => {
+        const [uploadFile, setUploadFile] = useState<any>();
+        const props: UploadProps = {
+            beforeUpload: (file: any, _) => {
+                const compressedFile = ImageCompressor.uploadImage(file, setUploadFile);
+                return compressedFile;
+            },
+            accept: 'image/jpg, image/png, image/jpeg',
+            onRemove: (file: any) => {
+                setUploadFile(null);
+            },
+            listType: "text",
+            previewFile: uploadFile,
+        };
+        return (
+            <Row wrap gutter={32}>
+                <Col><a href={"https://okcr.in/06ALwwW"} target={"_blank"}>
+                    <QRCode value={"https://okcr.in/06ALwwW"} icon={LOGO} /></a></Col>
+                <Col style={{ marginTop: 24 }}>
+                    <Form onFinish={(val) => {
+                        console.log("Drawer submit: ", val)
+                        setLoading(true);
+                        customUpload({
+                            onError: () => message.error("Error uploading in firebase", 5),
+                            onSuccess: (downloadURL: string) => {
+                                message.success(`Payment transaction recorded successfully for: ${regID}`, 5);
+                                createPayment(
+                                    downloadURL,
+                                    regID,
+                                    setLoading,
+                                    () => { setOpen(false); message.success("Payment prrof uploaded successfully", 5) },
+                                    () => { message.error("Error uploading image. Please try again.", 5) },
+                                );
+                                setOpen(false)
+                                setUploadFile(null)
+                                setLoading(false)
+                            },
+                            file: uploadFile,
+                        });
+                    }}>
+
+                        <Row><Typography.Text strong style={{ fontSize: width > 768 ? 20 : 16 }}>{t('drawer.subtitle')}</Typography.Text></Row>
+                        <Row>{t('drawer.subtitle2')}</Row>
+                        <br />
+                        <Alert showIcon message={t('drawer.message')} type="warning" style={{ width: "fit-content" }} />
+                        <Form.Item name={"image"} required hasFeedback>
+                            <Upload  {...props}>
+                                <Button style={{ marginTop: 24 }} icon={<UploadOutlined />}>{t('drawer.button')}</Button>
+                            </Upload>
+                        </Form.Item>
+                        <Form.Item>
+                            {uploadFile && <Button type="primary" htmlType="submit" loading={loading}>Submit</Button>}
+                        </Form.Item>
+                    </Form>
+                </Col>
+            </Row>
+        )
     };
+
     return (
         <>
             {loading ? <Skeleton /> :
@@ -109,20 +153,7 @@ export const Success: React.FC<any> = () => {
                         headerStyle={{ backgroundColor: "#eae04f" }}
                     // onClose={onClose}
                     >
-                        <Row wrap gutter={32}>
-                            <Col><a href={"https://okcr.in/06ALwwW"} target={"_blank"}>
-                                <QRCode value={"https://okcr.in/06ALwwW"} icon={LOGO} /></a></Col>
-                            <Col style={{ marginTop: 24 }}>
-                                <Row><Typography.Text strong style={{ fontSize: width > 768 ? 20 : 16 }}>{t('drawer.subtitle')}</Typography.Text></Row>
-                                <Row>{t('drawer.subtitle2')}</Row>
-                                <br />
-                                <Alert showIcon message={t('drawer.message')} type="warning" style={{ width: "fit-content" }} />
-                                <Space><Upload  {...props}>
-                                    <Button style={{ marginTop: 24 }} icon={<UploadOutlined />}>{t('drawer.button')}</Button>
-                                </Upload>{files?.length && <Button>Submit</Button>}</Space>
-
-                            </Col>
-                        </Row>
+                        <DrawerContent />
                     </Drawer>
                     <Result
                         status="success"

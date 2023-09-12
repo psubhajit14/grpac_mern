@@ -13,6 +13,7 @@
     "@types/react-dom": "^18.2.7",
     "antd": "^5.8.3",
     "axios": "^1.4.0",
+    "browser-image-compression": "^2.0.2",
     "crypto-js": "^4.1.1",
     "dotenv": "^16.3.1",
     "env-cmd": "^10.1.0",
@@ -30,9 +31,9 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "env-cmd -f config/.env react-scripts start",
-    "build": "env-cmd -f config/.env react-scripts build",
-    "test": "env-cmd -f config/.env react-scripts test",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

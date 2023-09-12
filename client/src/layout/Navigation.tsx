@@ -35,9 +35,14 @@ export const Navigation: React.FC<any> = ({ collapsed }) => {
                             key: 2,
                         },
                         {
+                            label: 'Payment Details',
+                            icon: <Link to="/payment"> <MdPayment /></Link>,
+                            key: 3,
+                        },
+                        {
                             label: (user ? 'Logout' : 'Log in'),
                             icon: (user ? <Link to="/user" onClick={() => logout()}><TbLogout /></Link> : <Link to="/user"><TbLogin /></Link>),
-                            key: 3
+                            key: 4
                         }
                     ]} >
             </Menu >
@@ -62,9 +67,14 @@ export const NavigationMobile: React.FC<any> = () => {
             key: 2,
         },
         {
+            label: 'Payment Details',
+            icon: <MdPayment size={16} />,
+            key: 3,
+        },
+        {
             label: user !== null ? 'Logout' : 'Login',
             icon: user !== null ? <MdLogout /> : <MdLogin />,
-            key: 3
+            key: 4
         }
     ]
     const menuProps = {
@@ -79,6 +89,9 @@ export const NavigationMobile: React.FC<any> = () => {
                     navigate("/dashboard");
                     break;
                 case "3":
+                    navigate("/payment");
+                    break;
+                case "4":
                     if (user) {
                         logout();
                     }
