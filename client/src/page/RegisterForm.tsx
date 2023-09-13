@@ -1,4 +1,4 @@
-import { Form, Input, Radio, Select, Button, message, Typography, Row } from "antd"
+import { Form, Input, Radio, Select, Button, message, Typography, Row, Avatar } from "antd"
 import { data, translated } from "../data"
 
 import { createRecord } from "../database/firebaseUtil"
@@ -6,6 +6,8 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useViewport } from "../util"
 import { useTranslation } from "react-i18next"
+import { SlUserFemale } from 'react-icons/sl'
+import { images } from "../images"
 
 
 
@@ -13,10 +15,11 @@ export const RegisterForm: React.FC<any> = () => {
 
     const navigate = useNavigate();
     const [formInstance] = Form.useForm();
+    const gender = Form.useWatch("gender", formInstance);
     const district = Form.useWatch("district", formInstance);
     const block = Form.useWatch("block", formInstance);
     const inputRef = useRef(null);
-    const { resetFields } = formInstance;
+    const { resetFields, setFieldValue } = formInstance;
     const [loading, setLoading] = useState(false)
     const { width } = useViewport();
     const [otherInput, setOtherInput] = useState(false)
@@ -52,9 +55,9 @@ export const RegisterForm: React.FC<any> = () => {
     return (
         <><Row justify={width > 768 ? "center" : "start"} style={{
             marginBottom: width > 468 ? 24 : 0
-        }}><Typography.Title>{t('title')}</Typography.Title></Row>
+        }}><Typography.Title level={2}>{t('title')}</Typography.Title></Row>
 
-            <Form style={{ width: "80%" }}
+            <Form style={{ width: width < 768 ? "100%" : "80%" }}
                 layout={width > 768 ? "horizontal" : "vertical"}
                 labelCol={{ span: width > 768 ? 6 : 24 }} wrapperCol={{ span: width > 768 ? 18 : 24 }}
                 onFinish={(val) => handleSubmit(val)}
@@ -64,24 +67,34 @@ export const RegisterForm: React.FC<any> = () => {
                 <Form.Item name='name' label={t('name.label')} rules={[
                     { required: true, message: 'Name is required!' }
                 ]} hasFeedback>
-                    <Input />
+                    <Input size="large" />
                 </Form.Item>
                 <Form.Item name='email' label={t('email.label')} rules={[
                     { type: 'email', message: 'Email is invalid!' }
                 ]} hasFeedback>
-                    <Input type='email' inputMode="email" />
+                    <Input type='email' inputMode="email" size="large" />
                 </Form.Item>
-                <Form.Item name="gender" label={t('gender.label')} initialValue={"male"}>
-                    <Radio.Group options={translated(t).gender}
+                <Form.Item name="gender" label={t('gender.label')} initialValue='female'>
+                    {/* <Radio.Group options={translated(t).gender}
                         optionType={"button"}
-                    />
+                    /> */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 40 }}>
+                        <div style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 10 }} onClick={() => setFieldValue('gender', 'female')}>
+                            <Avatar icon={<img src={images.Female} style={{ padding: 3 }} />} style={{ backgroundColor: gender === 'female' ? 'black' : 'grey' }} />
+                            <Typography>{t('gender.option.female')} </Typography>
+                        </div>
+                        <div style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 10 }} onClick={() => setFieldValue('gender', 'male')}>
+                            <Avatar icon={<img src={images.Male} style={{ padding: 3 }} />} style={{ backgroundColor: gender === 'male' ? 'black' : 'grey' }} />
+                            <Typography>{t('gender.option.male')} </Typography>
+                        </div>
+                    </div>
                 </Form.Item>
                 <Form.Item name='mobileNo' label={t('mobileNo.label')}
                     rules={[
                         { required: true, message: 'Mobile No is required!' },
                         { pattern: RegExp("^\\d{10}$"), message: "Mobile No should be 10 digit!" },
                     ]} hasFeedback >
-                    <Input addonBefore="+91" type='number' inputMode="tel"
+                    <Input addonBefore="+91" type='number' inputMode="tel" size="large"
                     // onChange={() => {
                     //     setUid && setUid(undefined);
                     //     setFieldValue("uuid", undefined)
@@ -117,12 +130,13 @@ export const RegisterForm: React.FC<any> = () => {
                             (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
                         }
                         options={translated(t).occupationList}
+                        size="large"
                     />
                 </Form.Item>
 
                 {otherInput &&
                     <Form.Item label=" " style={{ marginBottom: 0 }} colon={false} >
-                        <Input required ref={inputRef} placeholder="Please type your occupation" />
+                        <Input required ref={inputRef} placeholder="Please type your occupation" size="large" />
                     </Form.Item>}
 
                 <Form.Item name='district' style={{ marginTop: 24 }} label={t('district.label')} rules={[
@@ -138,6 +152,7 @@ export const RegisterForm: React.FC<any> = () => {
                             (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
                         }
                         options={data.districtList}
+                        size="large"
                     />
                 </Form.Item>
                 <Form.Item name='block' label={t('block.label')} rules={[
@@ -155,6 +170,7 @@ export const RegisterForm: React.FC<any> = () => {
                         options={data.blocks?.find((item: any) =>
                             item.district === district
                         )?.blockList}
+                        size="large"
                     />
                 </Form.Item>
                 <Form.Item name='mouza' label={t('mouza.label')} hasFeedback>
@@ -170,18 +186,19 @@ export const RegisterForm: React.FC<any> = () => {
                             options={data.mouzas?.find((item: any) =>
                                 item.block === block
                             )?.mouzaList}
-                        /> : <Input />
+                            size="large"
+                        /> : <Input size="large" />
                     }
                 </Form.Item>
                 <Form.Item name='pin' label={t('pin.label')} rules={[
                     { required: true, message: 'Pin Code is required!' },
                     { pattern: RegExp("^\\d{6}$"), message: 'Pin should be 6 digit!' },
                 ]} hasFeedback>
-                    <Input type='number' inputMode="tel" />
+                    <Input type='number' inputMode="tel" size="large" />
                 </Form.Item>
 
                 <Form.Item wrapperCol={{ span: width > 768 ? 20 : 24, offset: width > 768 ? 6 : 0 }} style={{ paddingTop: 8 }}>
-                    <Button type='primary' htmlType='submit' loading={loading}>{t('register')}</Button>
+                    <Button type='primary' style={{ width: width < 500 ? '100%' : '30%' }} size='large' htmlType='submit' loading={loading}>{t('register')}</Button>
                 </Form.Item>
             </Form>
             {/* <Col span={width > 768 ? 4 : 6}>

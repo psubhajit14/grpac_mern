@@ -1,24 +1,23 @@
 {
-    
     "registration_form": {
-        "title": "রেজিস্ট্রেশন ফর্ম",
-        "name" : {
+        "title": "আপনার বিবরণ পূরণ করুন",
+        "name": {
             "label": "নাম"
         },
-        "email" : {
+        "email": {
             "label": "ই-মেইল"
         },
         "gender": {
-            "label" : "লিঙ্গ",
-            "option" : {
+            "label": "লিঙ্গ",
+            "option": {
                 "male": "পুরুষ",
-                "female" : "নারী"
+                "female": "নারী"
             }
         },
-        "mobileNo" : {
+        "mobileNo": {
             "label": "মোবাইল নম্বর"
         },
-        "occupation" : {
+        "occupation": {
             "label": "পেশা",
             "option": {
                 "1": "সরকারি কর্মচারী",
@@ -31,22 +30,22 @@
                 "8": "অন্যান্য"
             }
         },
-        "district" : {
+        "district": {
             "label": "জেলা"
         },
-        "block" : {
+        "block": {
             "label": "নগরপালিকা / ব্লক"
         },
-        "mouza" : {
+        "mouza": {
             "label": "মৌজা / গ্রাম"
         },
-        "pin" : {
+        "pin": {
             "label": "পিনকোড"
         },
         "register": "নথিভুক্ত করুন"
     },
     "success": {
-        "title" : "সাফল্যের সাথে GRPAC-এ নিবন্ধিত হয়েছে সংদর্ভ নম্বর:",
+        "title": "সাফল্যের সাথে GRPAC-এ নিবন্ধিত হয়েছে সংদর্ভ নম্বর:",
         "home": "ফিরে যান",
         "donate": "অর্থ দান করুন",
         "drawer": {

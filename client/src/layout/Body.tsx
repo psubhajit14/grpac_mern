@@ -11,7 +11,7 @@ export const Body: React.FC<any> = () => {
     const { width } = useViewport();
     return (
         <Content style={{ width: '100%', height: "100%", padding: `8px ${width > 768 ? "24px" : "0px"}`, overflow: 'scroll', backgroundColor: "white" }}>
-            <Card style={{ backgroundColor: "#fcf6a9", }}
+            <Card style={{ background: "linear-gradient(105deg, #FFFCD9 0%, rgba(255, 252.13, 214.62, 0.11) 91%)" }}
                 cover={<img alt="example" src={Banner} style={{ boxShadow: "0px 4px 20px rgba(0,0,0,0.2)" }} />}>
                 <RouterComponent />
             </Card>

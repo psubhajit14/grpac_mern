@@ -14,7 +14,23 @@ export const App: React.FC<any> = () => {
   const [collapsed, setCollapsed] = useState(false);
 
   return (
-    <ConfigProvider>
+    <ConfigProvider theme={{
+      token: {
+        colorPrimary: 'black',
+      },
+      components: {
+
+        Input: {
+          colorBgContainer: 'transparent',
+          colorBorder: 'grey',
+        },
+        Select: {
+          colorTextPlaceholder: 'black',
+          colorBgContainer: 'transparent',
+          colorBorder: 'grey',
+        },
+      }
+    }}>
       <BrowserRouter>
         <ViewportProvider>
           <Layout>

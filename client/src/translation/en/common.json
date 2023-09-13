@@ -1,23 +1,23 @@
 {
     "registration_form": {
-        "title": "Registration Form" ,
-        "name" : {
-            "label": "Fullname"
+        "title": "Fill Your Details",
+        "name": {
+            "label": "Full Name"
         },
-        "email" : {
+        "email": {
             "label": "Email-ID"
         },
         "gender": {
-            "label" : "Gender",
-            "option" : {
+            "label": "Gender",
+            "option": {
                 "male": "Male",
-                "female" : "Female"
+                "female": "Female"
             }
         },
-        "mobileNo" : {
+        "mobileNo": {
             "label": "Mobile No"
         },
-        "occupation" : {
+        "occupation": {
             "label": "Occupation",
             "option": {
                 "1": "Govt. Employee",
@@ -30,22 +30,22 @@
                 "8": "Other"
             }
         },
-        "district" : {
+        "district": {
             "label": "District"
         },
-        "block" : {
+        "block": {
             "label": "Municipality / Block"
         },
-        "mouza" : {
+        "mouza": {
             "label": "Mouza / Village"
         },
-        "pin" : {
+        "pin": {
             "label": "Pin Code"
         },
         "register": "Register"
-    }, 
+    },
     "success": {
-        "title" : "Successfully Registered in 'GRPAC' with reference number:",
+        "title": "Successfully Registered in 'GRPAC' with reference number:",
         "home": "Go to Home",
         "donate": "Donate now",
         "drawer": {
