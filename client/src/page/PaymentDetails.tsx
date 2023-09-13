@@ -16,9 +16,7 @@ export const PaymentDetails: React.FC<any> = () => {
     const [user] = useAuthState(auth);
     const navigate = useNavigate();
     useEffect(() => {
-        if (user != null) {
-            console.log(user)
-        } else {
+        if (user == null) {
             navigate("/user", { replace: true })
         }
     }, [user])
