@@ -1,13 +1,10 @@
-import { DownOutlined } from "@ant-design/icons"
-import { Typography, Menu, Dropdown, MenuProps, Space, Button } from "antd"
+import { Typography, Menu, Dropdown, MenuProps } from "antd"
 import Sider from "antd/es/layout/Sider"
-import { useCallback, useState } from "react"
-import { RxPerson } from "react-icons/rx"
-import { BsPerson, BsPersonFill, BsTable } from "react-icons/bs"
-import { MdDetails, MdLogin, MdLogout, MdPayment, MdPerson } from "react-icons/md"
-import { Link, useLocation, useNavigate } from "react-router-dom"
+import { BsTable } from "react-icons/bs"
+import { MdLogin, MdLogout, MdPayment } from "react-icons/md"
+import { Link, useNavigate } from "react-router-dom"
 import { GiHamburgerMenu } from 'react-icons/gi'
-import { TbListDetails, TbHome2, TbLogout, TbLogin } from 'react-icons/tb'
+import { TbHome2, TbLogout, TbLogin } from 'react-icons/tb'
 import { logout } from "../database/authUtil"
 import { useAuthState } from "react-firebase-hooks/auth"
 import { auth } from "../database/firebaseUtil"
@@ -35,9 +32,14 @@ export const Navigation: React.FC<any> = ({ collapsed }) => {
                             key: 2,
                         },
                         {
+                            label: 'Payment Details',
+                            icon: <Link to="/payment"> <MdPayment /></Link>,
+                            key: 3,
+                        },
+                        {
                             label: (user ? 'Logout' : 'Log in'),
                             icon: (user ? <Link to="/user" onClick={() => logout()}><TbLogout /></Link> : <Link to="/user"><TbLogin /></Link>),
-                            key: 3
+                            key: 4
                         }
                     ]} >
             </Menu >
@@ -62,21 +64,14 @@ export const NavigationMobile: React.FC<any> = () => {
             key: 2,
         },
         {
-            label: 'User',
-            icon: <RxPerson size={16} />,
+            label: 'Payment Details',
+            icon: <MdPayment size={16} />,
             key: 3,
-            children: [
-                {
-                    key: '3-1',
-                    label: 'User Profile',
-                    icon: <TbListDetails />
-                },
-                {
-                    key: '3-2',
-                    label: user !== null ? 'Logout' : 'Login',
-                    icon: user !== null ? <MdLogout /> : <MdLogin />
-                },
-            ],
+        },
+        {
+            label: user !== null ? 'Logout' : 'Login',
+            icon: user !== null ? <MdLogout /> : <MdLogin />,
+            key: 4
         }
     ]
     const menuProps = {
@@ -90,7 +85,10 @@ export const NavigationMobile: React.FC<any> = () => {
                 case "2":
                     navigate("/dashboard");
                     break;
-                case "3-2":
+                case "3":
+                    navigate("/payment");
+                    break;
+                case "4":
                     if (user) {
                         logout();
                     }

@@ -5,12 +5,14 @@ import { DataGrid } from "./page/DataGrid";
 import { Login } from "./page/Login";
 import { RegisterForm } from "./page/RegisterForm";
 import { Success } from "./page/Success";
+import { PaymentDetails } from "./page/PaymentDetails";
 
 export const RouterComponent: React.FC<any> = () => {
     return (
         <Routes>
             <Route index element={<RegisterForm />} />
             <Route path="dashboard" element={<DataGrid />} />
+            <Route path="payment" element={<PaymentDetails />} />
             <Route path="user" element={<Login />} />
             <Route path="success/:refId" element={<Success />} />
             <Route path="*" element={<Result

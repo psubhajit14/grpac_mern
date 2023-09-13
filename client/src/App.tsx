@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ConfigProvider, Divider, Layout, Space, theme, Typography } from 'antd';
+import { ConfigProvider, Layout, Typography } from 'antd';
 import { Footer } from 'antd/es/layout/layout';
 import {
   BrowserRouter, Link,
@@ -25,7 +25,7 @@ export const App: React.FC<any> = () => {
               <Footer style={{ textAlign: 'center', width: '100%', }}>
                 <DiCodeigniter style={{ fontSize: 16 }} color='crimson' />
                 <Typography.Text> Developed by Subhajit Paul. Please visit
-                  <Link target="_blank" to="https://github.com/psubhajit14/grpac_mern"> here </Link>
+                  <Link target="_blank" to="https://github.com/psubhajit14/grpac_mern"><b> here </b></Link>
                   to know more.
                 </Typography.Text>
               </Footer>

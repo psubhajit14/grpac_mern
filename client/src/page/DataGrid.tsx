@@ -1,4 +1,4 @@
-import { Button, Divider, Input, InputRef, message, Result, Row, Space, Table, Tag, Typography } from "antd";
+import { Button, Divider, Input, InputRef, Result, Row, Space, Table, Tag, Typography } from "antd";
 import type { ColumnsType, ColumnType, TableProps } from 'antd/es/table';
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 
@@ -6,7 +6,6 @@ import { getDocs, collection, getDocsFromCache } from "@firebase/firestore"
 import { auth, firestore } from "../database/firebaseUtil";
 import { FilterConfirmProps } from "antd/es/table/interface";
 import { BiSearchAlt } from 'react-icons/bi'
-import { paymentContext } from "../util/state";
 import { CSVLink } from "react-csv";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link, useNavigate } from "react-router-dom";
@@ -42,8 +41,7 @@ export const DataGrid: React.FC<any> = () => {
     type DataIndex = keyof DataType;
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState<DataType[]>([]);
-    const { uid } = useContext(paymentContext)
-    const [admin, setAdmin] = useState(true);
+    const [admin, setAdmin] = useState(false);
     const getDBData = useCallback(async () => {
         // if (await isAdmin(user?.uid || " ")) {
         setLoading(true)
@@ -225,21 +223,6 @@ export const DataGrid: React.FC<any> = () => {
             title: 'Pin Code',
             dataIndex: 'pin',
             width: 100,
-        },
-        // {
-        //     title: 'Donated',
-        //     dataIndex: 'donated',
-        //     width: 100,
-        // },
-        {
-            title: "Action",
-            dataIndex: "uuid",
-            width: 100,
-            render: (value, _, __) =>
-                <>{uid && value === uid ? <Button onClick={() => {
-                    // onBuyClicked()
-                }}>Donate</Button> : null}</>
-            // <Button onClick={() => setOpenModal && setOpenModal(true)} type="primary">Donate Now</Button>
         }
     ];
 
@@ -257,7 +240,6 @@ export const DataGrid: React.FC<any> = () => {
         { label: 'Block', key: 'block' },
         { label: 'Mouza', key: 'mouza' },
         { label: 'PIN Code', key: 'pin' },
-        // { label: 'Donated', key: 'donated' },
     ];
     return (
         <>

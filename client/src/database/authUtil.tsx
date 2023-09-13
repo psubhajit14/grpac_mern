@@ -1,8 +1,8 @@
 import { message } from "antd";
 import { FirebaseError } from "firebase/app";
-import { createUserWithEmailAndPassword, getRedirectResult, GoogleAuthProvider, RecaptchaVerifier, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPhoneNumber, signInWithPopup, signInWithRedirect, signOut, updateCurrentUser } from "firebase/auth";
-import { collection, query, where, getDocs, addDoc, doc, getDoc, updateDoc, setDoc, documentId } from "firebase/firestore";
-import { auth, checkUserExists, firestore } from "./firebaseUtil";
+import { createUserWithEmailAndPassword, GoogleAuthProvider, RecaptchaVerifier, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPhoneNumber, signInWithPopup, signOut } from "firebase/auth";
+import { collection, addDoc, doc, getDoc, setDoc } from "firebase/firestore";
+import { auth, firestore } from "./firebaseUtil";
 
 
 export const onCaptchVerify = (

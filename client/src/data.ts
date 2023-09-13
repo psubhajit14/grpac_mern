@@ -1,38 +1,47 @@
-export const data = {
-  occupationList: [
+export const translated = (t: any) => ({
+    gender: [{
+    'label': t('gender.option.male'),
+    'value': 'male'
+}, {
+    'label': t('gender.option.female'),
+    'value': 'female'
+}],
+occupationList: [
     {
         value: 'Govt. Employee',
-        label: 'Govt. Employee',
+        label: t('occupation.option.1'),
     },
     {
         value: 'Private Sector Employee',
-        label: 'Private Sector Employee',
+        label: t('occupation.option.2'),
     },
     {
         value: 'Retired',
-        label: 'Retired',
+        label: t('occupation.option.3'),
     },
     {
         value: 'Businessman',
-        label: 'Businessman',
+        label: t('occupation.option.4'),
     },
     {
         value: 'Self-Employed',
-        label: 'Self-Employed',
+        label: t('occupation.option.5'),
     },
     {
         value: 'Farmer',
-        label: 'Farmer',
+        label: t('occupation.option.6'),
     },
     {
         value: 'Goldsmith',
-        label: 'Goldsmith',
+        label: t('occupation.option.7'),
     },
     {
         value: "Other",
-        label: 'Other',
+        label: t('occupation.option.8'),
     },
 ],
+})
+export const data = {
     districtList: [
       {
           "value": "[ 01 ] BANKURA",

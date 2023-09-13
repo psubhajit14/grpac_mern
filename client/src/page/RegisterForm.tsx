@@ -1,12 +1,11 @@
-import { Form, Input, Radio, Select, Button, message, Typography, Row, Col } from "antd"
-import { data } from "../data"
+import { Form, Input, Radio, Select, Button, message, Typography, Row } from "antd"
+import { data, translated } from "../data"
 
 import { createRecord } from "../database/firebaseUtil"
-import { useCallback, useContext, useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useViewport } from "../util"
-import { paymentContext } from "../util/state"
-import { Ad } from "../ads/Ad"
+import { useTranslation } from "react-i18next"
 
 
 
@@ -21,6 +20,7 @@ export const RegisterForm: React.FC<any> = () => {
     const [loading, setLoading] = useState(false)
     const { width } = useViewport();
     const [otherInput, setOtherInput] = useState(false)
+    const [t] = useTranslation('common', { keyPrefix: 'registration_form' });
 
     useEffect(() => {
         resetFields()
@@ -52,7 +52,7 @@ export const RegisterForm: React.FC<any> = () => {
     return (
         <><Row justify={width > 768 ? "center" : "start"} style={{
             marginBottom: width > 468 ? 24 : 0
-        }}><Typography.Title>Registration Form</Typography.Title></Row>
+        }}><Typography.Title>{t('title')}</Typography.Title></Row>
 
             <Form style={{ width: "80%" }}
                 layout={width > 768 ? "horizontal" : "vertical"}
@@ -60,32 +60,23 @@ export const RegisterForm: React.FC<any> = () => {
                 onFinish={(val) => handleSubmit(val)}
                 form={formInstance}
                 scrollToFirstError
-                onFieldsChange={(_, fields: any) => {
-                    console.log(fields.find((item: any) => item.name[0] === "occupation"))
-                }}
             >
-                <Form.Item name='name' label="Fullname" rules={[
+                <Form.Item name='name' label={t('name.label')} rules={[
                     { required: true, message: 'Name is required!' }
                 ]} hasFeedback>
                     <Input />
                 </Form.Item>
-                <Form.Item name='email' label="Email" rules={[
+                <Form.Item name='email' label={t('email.label')} rules={[
                     { type: 'email', message: 'Email is invalid!' }
                 ]} hasFeedback>
                     <Input type='email' inputMode="email" />
                 </Form.Item>
-                <Form.Item name="gender" label="Gender" initialValue={"male"}>
-                    <Radio.Group options={[{
-                        'label': 'Male',
-                        'value': 'male'
-                    }, {
-                        'label': 'Female',
-                        'value': 'female'
-                    }]}
-                        optionType={"default"}
+                <Form.Item name="gender" label={t('gender.label')} initialValue={"male"}>
+                    <Radio.Group options={translated(t).gender}
+                        optionType={"button"}
                     />
                 </Form.Item>
-                <Form.Item name='mobileNo' label="Mobile No"
+                <Form.Item name='mobileNo' label={t('mobileNo.label')}
                     rules={[
                         { required: true, message: 'Mobile No is required!' },
                         { pattern: RegExp("^\\d{10}$"), message: "Mobile No should be 10 digit!" },
@@ -108,7 +99,7 @@ export const RegisterForm: React.FC<any> = () => {
                             }} style={{ margin: '0px', display: "inline" }} type="primary">Verify phone number</Button>{uuid != undefined && <Typography.Text type="success">Mobile No verified Successfully</Typography.Text>}</Space>
 
                         </Form.Item> */}
-                <Form.Item name='occupation' label="Occupation" style={{ marginBottom: 4 }} rules={[
+                <Form.Item name='occupation' label={t('occupation.label')} style={{ marginBottom: 4 }} rules={[
                     { required: true, message: 'Occupation is required!' }
                 ]} hasFeedback>
                     <Select
@@ -125,7 +116,7 @@ export const RegisterForm: React.FC<any> = () => {
                         filterSort={(optionA, optionB) =>
                             (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
                         }
-                        options={data.occupationList}
+                        options={translated(t).occupationList}
                     />
                 </Form.Item>
 
@@ -134,7 +125,7 @@ export const RegisterForm: React.FC<any> = () => {
                         <Input required ref={inputRef} placeholder="Please type your occupation" />
                     </Form.Item>}
 
-                <Form.Item name='district' style={{ marginTop: 24 }} label="District" rules={[
+                <Form.Item name='district' style={{ marginTop: 24 }} label={t('district.label')} rules={[
                     { required: true, message: 'District is required!' }
                 ]} hasFeedback>
                     <Select
@@ -149,7 +140,7 @@ export const RegisterForm: React.FC<any> = () => {
                         options={data.districtList}
                     />
                 </Form.Item>
-                <Form.Item name='block' label="Municipality / Block" rules={[
+                <Form.Item name='block' label={t('block.label')} rules={[
                     { required: true, message: 'Block is required!' }
                 ]} hasFeedback>
                     <Select
@@ -166,7 +157,7 @@ export const RegisterForm: React.FC<any> = () => {
                         )?.blockList}
                     />
                 </Form.Item>
-                <Form.Item name='mouza' label="Mouza / Village" hasFeedback>
+                <Form.Item name='mouza' label={t('mouza.label')} hasFeedback>
                     {data.mouzas?.find((item: any) => item.block === block)
                         ? <Select
                             showSearch
@@ -182,7 +173,7 @@ export const RegisterForm: React.FC<any> = () => {
                         /> : <Input />
                     }
                 </Form.Item>
-                <Form.Item name='pin' label="Pin Code" rules={[
+                <Form.Item name='pin' label={t('pin.label')} rules={[
                     { required: true, message: 'Pin Code is required!' },
                     { pattern: RegExp("^\\d{6}$"), message: 'Pin should be 6 digit!' },
                 ]} hasFeedback>
@@ -190,7 +181,7 @@ export const RegisterForm: React.FC<any> = () => {
                 </Form.Item>
 
                 <Form.Item wrapperCol={{ span: width > 768 ? 20 : 24, offset: width > 768 ? 6 : 0 }} style={{ paddingTop: 8 }}>
-                    <Button type='primary' htmlType='submit' loading={loading}>Register</Button>
+                    <Button type='primary' htmlType='submit' loading={loading}>{t('register')}</Button>
                 </Form.Item>
             </Form>
             {/* <Col span={width > 768 ? 4 : 6}>

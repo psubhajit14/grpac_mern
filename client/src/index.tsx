@@ -1,14 +1,32 @@
-import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import i18next from 'i18next';
+import { I18nextProvider } from 'react-i18next';
+import common_en from './translation/en/common.json'
+import common_ba from './translation/ba/common.json'
+
+i18next.init({
+  interpolation: { escapeValue: false },  // React already does escaping
+  lng: 'en',                              // language to use
+  resources: {
+    en: {
+      common: common_en               // 'common' is our custom namespace
+    },
+    ba: {
+      common: common_ba
+    }
+  },
+});
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <App />
+  <I18nextProvider i18n={i18next}>
+    <App />
+  </I18nextProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

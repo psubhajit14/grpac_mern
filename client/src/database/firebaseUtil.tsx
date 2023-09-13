@@ -1,5 +1,6 @@
 import { FirebaseError, initializeApp } from "firebase/app";
-import { getFirestore, getDoc, doc, setDoc } from "@firebase/firestore"
+import { getFirestore, getDoc, doc, setDoc, addDoc } from "@firebase/firestore"
+import { getDownloadURL, getStorage, ref, uploadBytesResumable, } from 'firebase/storage'
 import { getAuth } from 'firebase/auth'
 import { collection } from "@firebase/firestore"
 import { MD5 } from "crypto-js";
@@ -17,12 +18,28 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 export const firestore = getFirestore(app);
-
+export const storage = getStorage(app);
 export const auth = getAuth(app);
 
-const userRef = collection(firestore, "users")
 const paymentRef = collection(firestore, "payments")
-const constantsRef = collection(firestore, "constants")
+
+export const createPayment = async (
+    imageURL: string,
+    regID: string,
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>,
+    onSuccess: undefined | (() => void),
+    onError: undefined | ((error: any) => void)) => {
+    const uploadedOn = new Date();
+    try {
+        setLoading(true);
+        await addDoc(paymentRef, { url: imageURL, regID: regID, uploadedOn: uploadedOn });
+        setLoading(false);
+        onSuccess && onSuccess();
+    } catch (error: any) {
+        setLoading(false);
+        onError && onError(error);
+    }
+};
 
 
 export const createRecord = async (
@@ -58,6 +75,36 @@ export const checkUserExists = async (id: string) => {
     console.log("exists: ", document.exists())
     return document;
 }
+
+
+export const customUpload = async ({ onError, onSuccess, file }: any) => {
+    const filename = file.name;
+    const fileRef = ref(storage, `image/${filename}`);
+    const uploadTask = uploadBytesResumable(fileRef, file);
+    uploadTask.on('state_changed',
+        (snapshot) => {
+            // Observe state change events such as progress, pause, and resume
+            // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log("progress: ", progress)
+            // onProgress(progress);
+        },
+        () => {
+            // Handle unsuccessful uploads
+            onError();
+        },
+        () => {
+            // Handle successful uploads on complete
+            // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                console.log('File available at', downloadURL);
+                onSuccess(downloadURL);
+            });
+        }
+    )
+
+}
+
 
 // export const updateRecord = async (
 //     data: any,
