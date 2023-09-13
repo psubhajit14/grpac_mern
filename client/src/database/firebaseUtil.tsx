@@ -11,7 +11,7 @@ const firebaseConfig = {
     authDomain: process.env.REACT_APP_AUTH_DOMAIN,
     projectId: process.env.REACT_APP_PROJECT_ID,
     storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
-    messagingSenderId: process.env.REACT_APP_MESSAGING_SERNDER_ID,
+    messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
     appId: process.env.REACT_APP_APP_ID,
     measurementId: process.env.REACT_APP_MEASUREMENT_ID
 };
@@ -72,7 +72,7 @@ export const createRecord = async (
 export const checkUserExists = async (id: string) => {
     const docRef = doc(firestore, `users/${id}`);
     const document = await getDoc(docRef);
-    console.log("exists: ", document.exists())
+    // console.log("exists: ", document.exists())
     return document;
 }
 
@@ -86,7 +86,7 @@ export const customUpload = async ({ onError, onSuccess, file }: any) => {
             // Observe state change events such as progress, pause, and resume
             // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
             const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            console.log("progress: ", progress)
+            // console.log("progress: ", progress)
             // onProgress(progress);
         },
         () => {
@@ -97,7 +97,7 @@ export const customUpload = async ({ onError, onSuccess, file }: any) => {
             // Handle successful uploads on complete
             // For instance, get the download URL: https://firebasestorage.googleapis.com/...
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                console.log('File available at', downloadURL);
+                // console.log('File available at', downloadURL);
                 onSuccess(downloadURL);
             });
         }

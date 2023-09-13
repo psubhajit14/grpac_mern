@@ -54,7 +54,7 @@ export const PaymentDetails: React.FC<any> = () => {
     useEffect(() => {
         getDBData();
     }, [getDBData])
-    console.log("data", data)
+    // console.log("data", data)
 
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
@@ -176,7 +176,7 @@ export const PaymentDetails: React.FC<any> = () => {
     ];
 
     const onChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter, extra) => {
-        console.log('params', pagination, filters, sorter, extra);
+        // console.log('params', pagination, filters, sorter, extra);
     };
     const headers = [
         { label: "Registration ID", key: "regID" },

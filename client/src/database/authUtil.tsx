@@ -44,7 +44,7 @@ export const onSignup = (
             onSuccess();
         })
         .catch((error) => {
-            console.log(error);
+            // console.log(error);
             setLoading(false);
         });
 }
@@ -58,12 +58,12 @@ export const onOTPVerify = (
     (window as any).confirmationResult
         .confirm(otp)
         .then(async (response: any) => {
-            console.log(response);
+            // console.log(response);
             onSuccess(response.user)
             setLoading(false);
         })
         .catch((err: any) => {
-            console.log(err);
+            // console.log(err);
             setLoading(false);
         });
 }
@@ -73,7 +73,7 @@ const adminRef = collection(firestore, "admins")
 const googleProvider = new GoogleAuthProvider();
 
 export const isAdmin = async (uid: string) => {
-    console.log("uid isAdmin", uid)
+    // console.log("uid isAdmin", uid)
     const docRef = doc(firestore, `admins/${uid}`);
     const document = await getDoc(docRef);
     if (!document.exists()) {

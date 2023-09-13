@@ -33,7 +33,7 @@ export const ImageCompressor = {
     uploadImage: async (file: any, onCompress: any) => {
         const compressImage = async (file: any) => {
             const imageDimensions = await imageSize(file);
-            console.log("imageDimensions", { dimension: imageDimensions, size: niceBytes(file.size) });
+            // console.log("imageDimensions", { dimension: imageDimensions, size: niceBytes(file.size) });
 
             const options: Options = {
                 maxSizeMB: .4,
@@ -44,7 +44,7 @@ export const ImageCompressor = {
 
             const compressedImage = await imageCompression(file, options);
             const compressedimageDimensions = await imageSize(compressedImage);
-            console.log("compressedimageDimensions", { dimension: compressedimageDimensions, size: niceBytes(compressedImage.size) });
+            // console.log("compressedimageDimensions", { dimension: compressedimageDimensions, size: niceBytes(compressedImage.size) });
             return compressedImage;
         };
         const image = await compressImage(file);

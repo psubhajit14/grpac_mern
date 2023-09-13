@@ -77,7 +77,7 @@ export const NavigationMobile: React.FC<any> = () => {
     const menuProps = {
         items,
         onClick: (e: any) => {
-            console.log(e.key)
+            // console.log(e.key)
             switch (e.key) {
                 case "1":
                     navigate("/");

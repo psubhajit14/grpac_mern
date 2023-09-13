@@ -36,14 +36,14 @@ export const RegisterForm: React.FC<any> = () => {
         }
         // console.log((inputRef.current as any).input.value)
 
-        console.log(testdata)
+        // console.log(testdata)
         const onSuccess = (id: string) => {
             message.success("successfully data pushed to firebase", 2);
             resetFields()
             navigate(`/success/${id}`)
         }
         const onError = (error: any) => {
-            console.log(error)
+            // console.log(error)
             message.error(error.message, 2);
         }
         createRecord(testdata, setLoading, onSuccess, onError)
