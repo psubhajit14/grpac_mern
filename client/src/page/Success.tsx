@@ -1,10 +1,9 @@
-import { Alert, Button, Col, Drawer, Form, message, QRCode, Result, Row, Skeleton, Space, Typography, Upload, UploadProps } from "antd"
+import { Alert, Button, Col, Drawer, Form, message, QRCode, Result, Row, Skeleton, Typography, Upload, UploadProps } from "antd"
 // import axios from "axios";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { checkUserExists, createPayment, customUpload } from "../database/firebaseUtil";
 import { useViewport } from "../util";
-import { IoCopyOutline } from 'react-icons/io5'
 import { useTranslation } from "react-i18next";
 import '../styles/qrcode.css'
 import LOGO from '../assets/logo.png'
@@ -16,8 +15,8 @@ export const Success: React.FC<any> = () => {
     const { refId } = useParams();
     const [t] = useTranslation('common', { keyPrefix: 'success' });
 
-    const [loading, setLoading] = useState(false);
-    const [regID, setRegID] = useState("GRPAC-000010");
+    const [loading, setLoading] = useState(true);
+    const [regID, setRegID] = useState("");
     // const [loading, setLoading] = useState(false)
     // const handlePayment = async (price: string) => {
     //     const baseURL = "https://grpac-mern.vercel.app/api/payment/";
@@ -57,17 +56,17 @@ export const Success: React.FC<any> = () => {
     //     }
     // }
     const navigate = useNavigate();
-    // useEffect(() => {
-    //     checkUserExists(refId as string)
-    //         .then((document: any) => {
-    //             setLoading(false)
-    //             if (!document.exists()) {
-    //                 navigate("/")
-    //             } else {
-    //                 setRegID(document.data().registration_id);
-    //             }
-    //         }).catch((error: any) => navigate("/"))
-    // }, [refId])
+    useEffect(() => {
+        checkUserExists(refId as string)
+            .then((document: any) => {
+                setLoading(false)
+                if (!document.exists()) {
+                    navigate("/")
+                } else {
+                    setRegID(document.data().registration_id);
+                }
+            }).catch((error: any) => navigate("/"))
+    }, [refId])
     const { width } = useViewport();
     const [open, setOpen] = useState(false);
     const showDrawer = () => {

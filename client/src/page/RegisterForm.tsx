@@ -1,12 +1,10 @@
-import { Form, Input, Radio, Select, Button, message, Typography, Row, Col } from "antd"
+import { Form, Input, Radio, Select, Button, message, Typography, Row } from "antd"
 import { data, translated } from "../data"
 
 import { createRecord } from "../database/firebaseUtil"
-import { useCallback, useContext, useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useViewport } from "../util"
-import { paymentContext } from "../util/state"
-import { Ad } from "../ads/Ad"
 import { useTranslation } from "react-i18next"
 
 

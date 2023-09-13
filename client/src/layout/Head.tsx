@@ -1,14 +1,9 @@
-import { Button, Col, Dropdown, Row, Space, Switch, theme, Typography } from "antd"
+import { Button, Row, Switch, theme, Typography } from "antd"
 import { Header } from "antd/es/layout/layout";
-import { AiOutlineMenuUnfold, AiOutlineMenuFold, AiOutlineHome } from "react-icons/ai"
+import { AiOutlineMenuUnfold, AiOutlineMenuFold } from "react-icons/ai"
 import { useViewport } from "../util";
-import { Navigation, NavigationMobile } from "./Navigation";
+import { NavigationMobile } from "./Navigation";
 import LOGO from '../assets/logo.png'
-import { IoArrowDownOutline } from "react-icons/io5";
-import { DownloadOutlined, DownOutlined } from "@ant-design/icons";
-import { Link, useNavigate } from "react-router-dom";
-import { BsTable } from "react-icons/bs";
-import type { MenuProps } from 'antd';
 import { useTranslation } from "react-i18next";
 
 export const Head: React.FC<any> = ({ collapsed, setCollapsed }) => {

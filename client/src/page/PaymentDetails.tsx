@@ -1,16 +1,18 @@
-import { getDocs, collection, getDocsFromCache, Timestamp } from "firebase/firestore";
-import { useEffect, useState, useContext, useCallback, useRef } from "react";
+import { getDocs, collection, getDocsFromCache } from "firebase/firestore";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { isAdmin } from "../database/authUtil";
 import { auth, firestore } from "../database/firebaseUtil";
-import { paymentContext } from "../util/state";
-import { Result, Button, Row, Typography, Divider, Table, InputRef, Input, Space, TableProps, Tag, Image } from "antd";
+import { Result, Button, Row, Typography, Divider, Table, InputRef, Input, Space, TableProps, Image } from "antd";
 import { CSVLink } from "react-csv";
 import { ColumnType, ColumnsType, FilterConfirmProps } from "antd/es/table/interface";
 import { BiSearchAlt } from "react-icons/bi";
+import dayjs, { Dayjs } from "dayjs";
+const localizedFormat = require('dayjs/plugin/localizedFormat')
 
 export const PaymentDetails: React.FC<any> = () => {
+    dayjs.extend(localizedFormat);
     const [user] = useAuthState(auth);
     const navigate = useNavigate();
     useEffect(() => {
@@ -24,7 +26,7 @@ export const PaymentDetails: React.FC<any> = () => {
         id: string,
         regID: string,
         url: string,
-        uploadedOn: Date
+        uploadedOn: Dayjs
     }
 
     type DataIndex = keyof DataType;
@@ -43,7 +45,7 @@ export const PaymentDetails: React.FC<any> = () => {
                 snapshot = await getDocsFromCache(collection(firestore, "payments"));
             }
             if (!snapshot.empty)
-                setData(snapshot?.docs.map((item: any) => ({ ...item.data(), uploadedOn: item.data().uploadedOn.toDate(), id: item.id })));
+                setData(snapshot?.docs.map((item: any) => ({ ...item.data(), uploadedOn: dayjs(item.data().uploadedOn.toDate()), id: item.id })));
             setLoading(false)
             setAdmin(true)
         }
@@ -168,10 +170,10 @@ export const PaymentDetails: React.FC<any> = () => {
         {
             title: 'Uploaded On',
             dataIndex: 'uploadedOn',
-            sorter: (a, b) => (a.uploadedOn <= b.uploadedOn ? 1 : 0),
-            sortDirections: ['descend'],
+            sorter: (a, b) => (a.uploadedOn.isAfter(b.uploadedOn) ? 1 : 0),
+            sortDirections: ['descend', 'ascend'],
             width: 100,
-            render: (value, record, index) => <Typography.Paragraph>{value.toLocaleString()}</Typography.Paragraph>
+            render: (value, record, index) => <Typography.Paragraph>{record.uploadedOn.format('LLLL')}</Typography.Paragraph>
         },
     ];
 
@@ -205,7 +207,7 @@ export const PaymentDetails: React.FC<any> = () => {
                     <Button type="primary" style={{ marginBottom: 16 }}><CSVLink data={data} headers={headers} filename="GRPAC_Payment_Record">Export to CSV</CSVLink></Button>
 
                     <Table loading={loading} columns={columns} dataSource={data} onChange={onChange} rowKey="id"
-                        pagination={{ pageSize: 5, hideOnSinglePage: true }}
+                        pagination={{ pageSize: 2, hideOnSinglePage: true }}
                         showSorterTooltip
                         scroll={{ x: 768, y: 600 }}
                         summary={(data: readonly DataType[]) => (

@@ -1,13 +1,10 @@
-import { DownOutlined } from "@ant-design/icons"
-import { Typography, Menu, Dropdown, MenuProps, Space, Button } from "antd"
+import { Typography, Menu, Dropdown, MenuProps } from "antd"
 import Sider from "antd/es/layout/Sider"
-import { useCallback, useState } from "react"
-import { RxPerson } from "react-icons/rx"
-import { BsPerson, BsPersonFill, BsTable } from "react-icons/bs"
-import { MdDetails, MdLogin, MdLogout, MdPayment, MdPerson } from "react-icons/md"
-import { Link, useLocation, useNavigate } from "react-router-dom"
+import { BsTable } from "react-icons/bs"
+import { MdLogin, MdLogout, MdPayment } from "react-icons/md"
+import { Link, useNavigate } from "react-router-dom"
 import { GiHamburgerMenu } from 'react-icons/gi'
-import { TbListDetails, TbHome2, TbLogout, TbLogin } from 'react-icons/tb'
+import { TbHome2, TbLogout, TbLogin } from 'react-icons/tb'
 import { logout } from "../database/authUtil"
 import { useAuthState } from "react-firebase-hooks/auth"
 import { auth } from "../database/firebaseUtil"

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ConfigProvider, Divider, Layout, Space, theme, Typography } from 'antd';
+import { ConfigProvider, Layout, Typography } from 'antd';
 import { Footer } from 'antd/es/layout/layout';
 import {
   BrowserRouter, Link,

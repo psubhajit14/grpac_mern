@@ -1,5 +1,4 @@
 import imageCompression, { Options } from "browser-image-compression";
-import { storage } from "../database/firebaseUtil";
 
 const units = ["bytes", "KiB", "MiB", "GiB", "TiB"]
 

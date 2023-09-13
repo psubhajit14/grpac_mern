@@ -21,9 +21,7 @@ export const firestore = getFirestore(app);
 export const storage = getStorage(app);
 export const auth = getAuth(app);
 
-const userRef = collection(firestore, "users")
 const paymentRef = collection(firestore, "payments")
-const constantsRef = collection(firestore, "constants")
 
 export const createPayment = async (
     imageURL: string,
@@ -80,7 +78,6 @@ export const checkUserExists = async (id: string) => {
 
 
 export const customUpload = async ({ onError, onSuccess, file }: any) => {
-    const fileId = new Date().getMilliseconds();
     const filename = file.name;
     const fileRef = ref(storage, `image/${filename}`);
     const uploadTask = uploadBytesResumable(fileRef, file);
@@ -92,7 +89,7 @@ export const customUpload = async ({ onError, onSuccess, file }: any) => {
             console.log("progress: ", progress)
             // onProgress(progress);
         },
-        (error) => {
+        () => {
             // Handle unsuccessful uploads
             onError();
         },
