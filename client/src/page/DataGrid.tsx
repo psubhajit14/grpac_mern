@@ -16,13 +16,13 @@ export const DataGrid: React.FC<any> = () => {
 
     const [user] = useAuthState(auth);
     const navigate = useNavigate();
-    useEffect(() => {
-        if (user != null) {
-            console.log(user)
-        } else {
-            navigate("/user", { replace: true })
-        }
-    }, [user])
+    // useEffect(() => {
+    //     if (user != null) {
+    //         console.log(user)
+    //     } else {
+    //         navigate("/user", { replace: true })
+    //     }
+    // }, [user])
     interface DataType {
         id: string;
         name: string;
@@ -43,20 +43,20 @@ export const DataGrid: React.FC<any> = () => {
     const [data, setData] = useState<DataType[]>([]);
     const [admin, setAdmin] = useState(false);
     const getDBData = useCallback(async () => {
-        if (await isAdmin(user?.uid || " ")) {
-            setLoading(true)
-            let snapshot: any;
-            try {
-                snapshot = await getDocs(collection(firestore, "users"));
-            }
-            catch (e) {
-                snapshot = await getDocsFromCache(collection(firestore, "users"));
-            }
-            if (!snapshot.empty)
-                setData(snapshot?.docs.map((item: any) => ({ ...item.data(), id: item.id })));
-            setLoading(false)
-            setAdmin(true)
+        // if (await isAdmin(user?.uid || " ")) {
+        setLoading(true)
+        let snapshot: any;
+        try {
+            snapshot = await getDocs(collection(firestore, "users"));
         }
+        catch (e) {
+            snapshot = await getDocsFromCache(collection(firestore, "users"));
+        }
+        if (!snapshot.empty)
+            setData(snapshot?.docs.map((item: any) => ({ ...item.data(), id: item.id })));
+        setLoading(false)
+        setAdmin(true)
+        // }
 
     }, [user])
 
