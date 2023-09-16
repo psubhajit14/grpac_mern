@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 
-import { Button, Col, Divider, Form, Input, message, Modal, Row, Typography } from "antd";
-import { IoCaretBackCircleOutline } from 'react-icons/io5'
+import { Avatar, Button, Col, Divider, Form, Input, message, Modal, Row, Typography } from "antd";
+import { RxCross2 } from 'react-icons/rx'
 import { useNavigate } from "react-router-dom";
 import '../styles/divider.css'
 import { FcGoogle } from 'react-icons/fc'
@@ -38,7 +38,7 @@ export const Login: React.FC<any> = () => {
                 bodyStyle={{ padding: "24px 0px" }}
             >
                 <Col span={24} style={{ padding: '0px 24px' }}>
-                    <Button type="primary" style={{ padding: "5px", overflow: "visible", "borderRadius": "50%" }} onClick={() => navigate("/", { replace: true })} icon={<IoCaretBackCircleOutline size={"20px"} />} />
+                    <Avatar style={{ padding: "3px", "borderRadius": "15px", width: '30px', height: '30px', backgroundColor: 'black' }} onClick={() => navigate("/", { replace: true })} icon={<RxCross2 size={"20px"} />} />
                     <Typography.Title style={{ fontSize: 32 }}>{formType}</Typography.Title>
                     <Form style={{ paddingTop: '24px' }} onFinish={(val) => { handleSubmit(val) }}>
                         {formType == "Sign Up" && <Form.Item name="name" rules={[

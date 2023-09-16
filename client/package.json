@@ -19,6 +19,7 @@
     "dotenv": "^16.3.1",
     "env-cmd": "^10.1.0",
     "firebase": "^10.2.0",
+    "gnews-scraper": "^1.2.3",
     "i18next": "^23.5.0",
     "react": "^18.2.0",
     "react-csv": "^2.2.2",

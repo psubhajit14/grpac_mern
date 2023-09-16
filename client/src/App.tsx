@@ -19,7 +19,6 @@ export const App: React.FC<any> = () => {
         colorPrimary: 'black',
       },
       components: {
-
         Input: {
           colorBgContainer: 'transparent',
           colorBorder: 'grey',

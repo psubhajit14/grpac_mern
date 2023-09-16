@@ -6,6 +6,7 @@ import { Login } from "./page/Login";
 import { RegisterForm } from "./page/RegisterForm";
 import { Success } from "./page/Success";
 import { PaymentDetails } from "./page/PaymentDetails";
+import NewsFeed from "./page/NewsFeed";
 
 export const RouterComponent: React.FC<any> = () => {
     return (
@@ -14,6 +15,7 @@ export const RouterComponent: React.FC<any> = () => {
             <Route path="dashboard" element={<DataGrid />} />
             <Route path="payment" element={<PaymentDetails />} />
             <Route path="user" element={<Login />} />
+            <Route path="news/feed" element={<NewsFeed />} />
             <Route path="success/:refId" element={<Success />} />
             <Route path="*" element={<Result
                 status="404"

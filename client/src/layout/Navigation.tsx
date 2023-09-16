@@ -2,6 +2,7 @@ import { Typography, Menu, Dropdown, MenuProps } from "antd"
 import Sider from "antd/es/layout/Sider"
 import { BsTable } from "react-icons/bs"
 import { MdLogin, MdLogout, MdPayment } from "react-icons/md"
+import { FaRegNewspaper } from "react-icons/fa"
 import { Link, useNavigate } from "react-router-dom"
 import { GiHamburgerMenu } from 'react-icons/gi'
 import { TbHome2, TbLogout, TbLogin } from 'react-icons/tb'
@@ -37,9 +38,14 @@ export const Navigation: React.FC<any> = ({ collapsed }) => {
                             key: 3,
                         },
                         {
+                            label: 'News',
+                            icon: <Link to="/news/feed"> <FaRegNewspaper /></Link>,
+                            key: 4,
+                        },
+                        {
                             label: (user ? 'Logout' : 'Log in'),
                             icon: (user ? <Link to="/user" onClick={() => logout()}><TbLogout /></Link> : <Link to="/user"><TbLogin /></Link>),
-                            key: 4
+                            key: 5
                         }
                     ]} >
             </Menu >
@@ -69,9 +75,14 @@ export const NavigationMobile: React.FC<any> = () => {
             key: 3,
         },
         {
+            label: 'News',
+            icon: <FaRegNewspaper size={16} />,
+            key: 4,
+        },
+        {
             label: user !== null ? 'Logout' : 'Login',
             icon: user !== null ? <MdLogout /> : <MdLogin />,
-            key: 4
+            key: 5
         }
     ]
     const menuProps = {
@@ -89,6 +100,9 @@ export const NavigationMobile: React.FC<any> = () => {
                     navigate("/payment");
                     break;
                 case "4":
+                    navigate("/news/feed");
+                    break;
+                case "5":
                     if (user) {
                         logout();
                     }
