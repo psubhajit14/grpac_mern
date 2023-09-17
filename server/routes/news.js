@@ -5,10 +5,13 @@ const puppeteer = require("puppeteer");
 
 const searchApiTopicWise = {
     "Sports": "https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRFp1ZEdvU0JXVnVMVWRDR2dKSlRpZ0FQAQ?hl=bn&gl=IN&ceid=IN:bn",
+    "India": "https://news.google.com/topics/CAAqIQgKIhtDQkFTRGdvSUwyMHZNRE55YXpBU0FtSnVLQUFQAQ?hl=bn&gl=IN&ceid=IN%3Abn",
+    "Business": "https://news.google.com/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRGx6TVdZU0FtSnVHZ0pKVGlnQVAB?hl=bn&gl=IN&ceid=IN%3Abn",
+    "Entertainment": "https://news.google.com/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNREpxYW5RU0FtSnVHZ0pKVGlnQVAB?hl=bn&gl=IN&ceid=IN%3Abn",
+    "World": "https://news.google.com/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRGx1YlY4U0FtSnVHZ0pKVGlnQVAB?hl=bn&gl=IN&ceid=IN%3Abn"
 }
 
 const baseUrl = 'https://news.google.com/';
-const searchQuery = (query) => '/search?q=' + query + '&hl=bn&gl=IN&ceid=IN:bn';
 const headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36'
 };
@@ -42,7 +45,7 @@ const getDetails = (element) => {
 }
 
 const crawlGoogleLink = async (topic) => {
-    const googleLink = "https://news.google.com/topics/CAAqKggKIiRDQkFTRlFvSUwyMHZNRFp1ZEdvU0JXVnVMVWRDR2dKSlRpZ0FQAQ?hl=bn&gl=IN&ceid=IN:bn"
+    const googleLink = searchApiTopicWise[topic];
     const response = await fetch(googleLink, { headers: headers })
     const body = await response.text();
     const html = parse(body)
@@ -71,9 +74,9 @@ const crawlGoogleLink = async (topic) => {
 
 }
 
-router.get('/feed', async (req, res) => {
+router.get('/feed/:topic', async (req, res) => {
     try {
-        const topic = req.params['topic']
+        const topic = req.params['topic'];
         const result = await crawlGoogleLink(topic);
         res.status(200).json(result)
     } catch (error) {

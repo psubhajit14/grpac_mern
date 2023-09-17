@@ -3,7 +3,6 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { IoMdArrowDroprightCircle } from 'react-icons/io'
-// import GNews from 'gnews-scraper'
 
 var relativeTime = require('dayjs/plugin/relativeTime')
 
@@ -12,24 +11,8 @@ dayjs.extend(relativeTime)
 const NewsFeed = () => {
     const [t] = useTranslation('common', { keyPrefix: 'feed' });
     const today = dayjs(new Date());
-    const getNews = async () => {
-        const news = await (await import('gnews-scraper')).default({
-            searchQuery: 'Nasdaq',
-            prettyUrl: true,
-            cache: true,
-            cacheTTL: 3600,
-            timeframe: '7d',
-            queryParams: {
-                hl: 'en-US',
-                gl: 'US',
-                ceid: "US:en"
-            }
-        });
-        console.log(news);
-    }
 
     useEffect(() => {
-        getNews();
         // googleNews.initialize((data: any) => console.log(data));
         // googleNews.addCountryCode('IN');
         // setInterval(googleNews.refresh, 1000 * 60 * 60);
