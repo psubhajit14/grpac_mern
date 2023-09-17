@@ -6,7 +6,7 @@ import { Login } from "./page/Login";
 import { RegisterForm } from "./page/RegisterForm";
 import { Success } from "./page/Success";
 import { PaymentDetails } from "./page/PaymentDetails";
-import NewsFeed from "./page/NewsFeed";
+import NewsFeed from "./page/NewsFeed/index";
 
 export const RouterComponent: React.FC<any> = () => {
     return (

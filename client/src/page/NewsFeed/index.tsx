@@ -1,4 +1,5 @@
 import { Avatar, Typography } from "antd";
+import axios from "axios";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -12,16 +13,17 @@ const NewsFeed = () => {
     const [t] = useTranslation('common', { keyPrefix: 'feed' });
     const today = dayjs(new Date());
 
+    const getNews = async () => {
+        try {
+            const res = await axios.get('https://grpac-mern.vercel.app/api/news/feed')
+            console.log('res: ', res)
+        } catch (e: any) {
+            console.log(e)
+        }
+    }
+
     useEffect(() => {
-        // googleNews.initialize((data: any) => console.log(data));
-        // googleNews.addCountryCode('IN');
-        // setInterval(googleNews.refresh, 1000 * 60 * 60);
-
-        // googleNews.search('MODI', 'IN').then((result: any) => {
-        //     console.log("result", result)
-        // }).catch(() => {
-
-        // })
+        getNews();
     }, [])
 
 
