@@ -62,6 +62,12 @@
     },
     "feed": {
         "title": "Your briefing",
-        "subTitle": "Top picks for you"
+        "subTitle": "Top picks for you",
+        "Sports": "Sports",
+        "India": "India",
+        "Business": "Business",
+        "Entertainment": "Entertainment",
+        "World": "World",
+        "relatedText": "Related news"
     }
 }

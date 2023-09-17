@@ -64,6 +64,12 @@
     },
     "feed": {
         "title": "আপনার ব্রিফিং",
-        "subTitle": "আপনার জন্য সেরা খবর"
+        "subTitle": "আপনার জন্য সেরা খবর",
+        "Sports": "খেলাধুলা",
+        "India": "ভারত",
+        "Business": "ব্যবসা",
+        "Entertainment": "বিনোদন",
+        "World": "বিশ্ব",
+        "relatedText": "সম্পর্কিত খবর"
     }
 }

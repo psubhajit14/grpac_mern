@@ -35,14 +35,14 @@ export const Head: React.FC<any> = ({ collapsed, setCollapsed }) => {
                         height: 64,
                     }}
 
-                /><Switch style={{ marginRight: 24 }} checkedChildren="EN" unCheckedChildren="বাংলা" defaultChecked onChange={(checked, _) => i18n.changeLanguage(checked ? 'en' : 'ba')} /> </div> :
+                /><Switch style={{ marginRight: 24 }} checkedChildren="EN" unCheckedChildren="বাংলা" defaultChecked onChange={(checked, _) => i18n.changeLanguage(checked ? 'en' : 'bn')} /> </div> :
                 <Row style={{ width: "90vw", height: 56, alignItems: "center", justifyContent: "space-between" }}>
                     <img src={LOGO} height={"90%"} />
                     <Typography.Title style={{ fontSize: 24 }} >
                         GRPAC
                     </Typography.Title>
                     <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                        <Switch checkedChildren="EN" unCheckedChildren="বাং" defaultChecked onChange={(checked, _) => i18n.changeLanguage(checked ? 'en' : 'ba')} />
+                        <Switch checkedChildren="EN" unCheckedChildren="বাং" defaultChecked onChange={(checked, _) => i18n.changeLanguage(checked ? 'en' : 'bn')} />
                         <NavigationMobile />
                     </div>
                 </Row>}
