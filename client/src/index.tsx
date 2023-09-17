@@ -5,7 +5,7 @@ import reportWebVitals from './reportWebVitals';
 import i18next from 'i18next';
 import { I18nextProvider } from 'react-i18next';
 import common_en from './translation/en/common.json'
-import common_ba from './translation/ba/common.json'
+import common_bn from './translation/bn/common.json'
 
 i18next.init({
   interpolation: { escapeValue: false },  // React already does escaping
@@ -14,8 +14,8 @@ i18next.init({
     en: {
       common: common_en               // 'common' is our custom namespace
     },
-    ba: {
-      common: common_ba
+    bn: {
+      common: common_bn
     }
   },
 });
